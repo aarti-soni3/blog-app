@@ -1,10 +1,18 @@
 import { useForm } from "react-hook-form";
+import { useRegisterUserMutation } from "../store/services/authSlice";
+import { useContext } from "react";
+import { ToastContext } from "../Context Provider/createContext";
+import { useNavigate } from "react-router";
 
 export default function Register() {
+  const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
     getFieldState,
   } = useForm({ defaultValues: { email: "", password: "" }, mode: "onSubmit" });
 
@@ -13,7 +21,23 @@ export default function Register() {
     return !invalid && (isTouched || isDirty);
   };
 
-  const onSubmit = () => {};
+  const [registerUser, { /*isError, error,*/ isLoading }] =
+    useRegisterUserMutation();
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await registerUser(data).unwrap();
+
+      if (response.user) {
+        reset();
+        showSuccessFeedback("User Registered Successfully!");
+        navigate("/");
+      }
+    } catch (error) {
+      showErrorFeedback(error.data.message);
+      console.log(error.data.message);
+    }
+  };
 
   return (
     <>
@@ -159,6 +183,14 @@ export default function Register() {
                   aria-invalid={errors.password ? "true" : "false"}
                   {...register("password", {
                     required: "Password is required",
+                    minLength: {
+                      value: 8,
+                      message: "Must be 8 character long",
+                    },
+                    pattern: {
+                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+                      message: "Must contain lowercase, uppercase & numbers!",
+                    },
                   })}
                   required
                 />
@@ -196,9 +228,14 @@ export default function Register() {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary">
-              Register
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={isLoading ? true : false}
+            >
+              {isLoading ? "Registering" : "Register"}
             </button>
+            {/* {isError && <div className="invalid-feedback">{error.message}</div>} */}
           </form>
         </div>
       </div>

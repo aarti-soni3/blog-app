@@ -1,13 +1,16 @@
+if (!process.env.NODE_ENV === 'production')
+    require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
-const connectDatabase = require('./config/db');
+const {connectMySQLDatabase} = require('./config/db');
 const authRouter = require('./routes/authRouter');
 const postRouter = require('./routes/postRouter');
 const userRouter = require('./routes/userRouter');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-connectDatabase();
+connectMySQLDatabase();
 
 const corsConfig = {
     origin: 'http://localhost:5173'

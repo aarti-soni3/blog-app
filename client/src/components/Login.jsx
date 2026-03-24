@@ -1,10 +1,20 @@
 // import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useLoginUserMutation } from "../store/services/authSlice";
+import { useContext } from "react";
+import { ToastContext } from "../Context Provider/createContext";
+import { useNavigate } from "react-router";
 
 export default function Login() {
+  const [loginUser, { isLoading /*error, isError*/ }] = useLoginUserMutation();
+
+  const navigate = useNavigate();
+  const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, touchedFields, dirtyFields },
   } = useForm({ defaultValues: { email: "", password: "" }, mode: "onSubmit" });
 
@@ -13,7 +23,20 @@ export default function Login() {
   const isPasswordValidFields =
     !errors.email && (touchedFields.password || dirtyFields.password);
 
-  const onSubmit = () => {};
+  const onSubmit = async (data) => {
+    try {
+      const response = await loginUser(data).unwrap();
+
+      if (response.user) {
+        reset();
+        showSuccessFeedback("You're logged in !");
+        navigate("/");
+      }
+    } catch (error) {
+      showErrorFeedback(error.data.message);
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -69,8 +92,12 @@ export default function Login() {
                 </div>
               )}
             </div>
-            <button type="submit" className="btn btn-primary">
-              Login
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={isLoading ? true : false}
+            >
+              {isLoading ? "Logging..." : "Login"}
             </button>
           </form>
         </div>
