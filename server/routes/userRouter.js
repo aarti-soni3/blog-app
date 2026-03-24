@@ -4,6 +4,4 @@ const router = express.Router();
 
 router.route('/profile').get(userController.getProfile);
 
-
-
 module.exports = router;

@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const connectDatabase = require('./config/db');
 const authRouter = require('./routes/authRouter');
 const postRouter = require('./routes/postRouter');
@@ -8,9 +9,16 @@ const port = 3000;
 
 connectDatabase();
 
+const corsConfig = {
+    origin: 'http://localhost:5173'
+}
+
+app.use(cors(corsConfig))
+app.use(express.json())
+
 app.use("/api/auth", authRouter);
-app.use("/api/users", authRouter);
-app.use("/api/posts", authRouter);
+app.use("/api/users", userRouter);
+app.use("/api/posts", postRouter);
 
 
 app.listen(port, () => {

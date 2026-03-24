@@ -8,13 +8,20 @@ import Contact from "./components/Contact";
 import Home from "./components/Home";
 import Register from "./components/Register";
 import Login from "./components/Login";
+// import { useGetAllPostsQuery } from "./store/services/postApi";
 
 function App() {
+  // const { isLoading, data } = useGetAllPostsQuery();
+
   return (
     <>
       <BrowserRouter>
         <NavBar />
-        <div className="d-flex justify-content-center mt-5" >
+
+        {/* {isLoading && <h5>loading....</h5>} */}
+        {/* {data && <p>{JSON.stringify(data)}</p>} */}
+
+        <div className="d-flex justify-content-center mt-5">
           <Routes>
             <Route path="/home" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
