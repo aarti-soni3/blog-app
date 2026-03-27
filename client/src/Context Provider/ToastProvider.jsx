@@ -2,6 +2,8 @@ import { toast } from "react-toastify";
 import { ToastContext } from "./createContext";
 
 export default function ToastProvider({ children }) {
+
+  //methods for feedback
   const showSuccessFeedback = (
     message,
     position = "bottom-left",

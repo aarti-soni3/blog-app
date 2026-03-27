@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLoginUserMutation } from "../store/services/authApiSlice";
 import { useContext } from "react";
@@ -6,31 +5,41 @@ import { ToastContext } from "../Context Provider/createContext";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../store/Slice/authSlice";
-// import { setLocalStorageData } from "../utils/localStorageUtility";
+import { userValidationSchema } from "../utils/formUtility";
+import FormErrorMessage from "./FormErrorMessage";
 
 export default function Login() {
-  const [loginUser, { isLoading /*error, isError*/ }] = useLoginUserMutation();
+  //used api slice hook
+  const [loginUser, { isLoading }] = useLoginUserMutation();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
 
+  //react form hook for managing state & validations
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, touchedFields, dirtyFields },
+    getFieldState,
+    formState: { errors },
   } = useForm({ defaultValues: { email: "", password: "" }, mode: "onSubmit" });
 
-  const isEmailValidFields =
-    !errors.email && (touchedFields.email || dirtyFields.email);
-  const isPasswordValidFields =
-    !errors.email && (touchedFields.password || dirtyFields.password);
+  const isValid = (fieldName) => {
+    const { invalid, isTouched, isDirty } = getFieldState(fieldName);
+    return !invalid && (isTouched || isDirty);
+  };
+
+  const loginSchema = {
+    email: userValidationSchema.email,
+    password: userValidationSchema.password,
+  };
 
   const onSubmit = async (data) => {
     try {
       const response = await loginUser(data).unwrap();
       if (response.user) {
+        //set user data
         dispatch(
           setCredentials({
             user: response.user,
@@ -65,21 +74,13 @@ export default function Login() {
                 type="email"
                 id="email"
                 name="email"
-                className={`form-control ${errors.email ? "is-invalid" : ""} ${isEmailValidFields ? "is-valid" : ""}`}
+                className={`form-control ${errors.email ? "is-invalid" : ""} ${isValid("email") ? "is-valid" : ""}`}
                 aria-invalid={errors.email ? "true" : "false"}
-                {...register("email", {
-                  pattern: {
-                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                    message: "Please enter valid Email-id",
-                  },
-                  required: "Email is required",
-                })}
+                {...register("email", loginSchema.email)}
                 required
               />
               <div className="valid-feedback">Looks good!</div>
-              {errors.email && (
-                <div className="invalid-feedback">{errors.email.message}</div>
-              )}
+              <FormErrorMessage error={errors.email} />
             </div>
             <div className="col-md mb-3">
               <label htmlFor="password" className="form-label">
@@ -89,17 +90,13 @@ export default function Login() {
                 type="password"
                 id="password"
                 name="password"
-                className={`form-control ${errors.password ? "is-invalid" : ""} ${isPasswordValidFields ? "is-valid" : ""}`}
+                className={`form-control ${errors.password ? "is-invalid" : ""} ${isValid("password") ? "is-valid" : ""}`}
                 aria-invalid={errors.password ? "true" : "false"}
-                {...register("password", { required: "Password is required" })}
+                {...register("password", loginSchema.password)}
                 required
               />
               <div className="valid-feedback">Looks good!</div>
-              {errors.password && (
-                <div className="invalid-feedback">
-                  {errors.password.message}
-                </div>
-              )}
+              <FormErrorMessage error={errors.password} />
             </div>
             <button
               type="submit"

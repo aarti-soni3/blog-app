@@ -4,6 +4,8 @@ import { Mutex } from 'async-mutex'
 import { logout, setCredentials } from "../Slice/authSlice";
 
 const mutex = new Mutex();
+
+//basequery configuration
 const baseQuery = fetchBaseQuery({
     baseUrl: 'http://localhost:3000/api/',
     prepareHeaders: (headers, { getState }) => {
@@ -18,6 +20,7 @@ const baseQuery = fetchBaseQuery({
     },
 })
 
+//wrapper for basequery for handling authentication
 export const baseQueryWithReauth = async (args, api, extraOptions) => {
 
     // wait if refresh is ongoing
@@ -25,7 +28,7 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
 
     // re requesting 
     let result = await baseQuery(args, api, extraOptions);
-    if (result.error && (result.error.status === 401 || result.error.status === 403)) {
+    if (result.error && (result.error.status === 401 /* || result.error.status === 403 */)) {
 
         const isRefreshRequest = typeof args === 'object' && args.url === '/auth/refresh';
         if (!isRefreshRequest && !mutex.isLocked()) {
@@ -42,6 +45,7 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
                     result = await baseQuery(args, api, extraOptions);
                 } else {
                     //logout
+                    console.log('calling logout from reauth');
                     await baseQuery({ url: '/auth/logout', method: "POST" }, api, extraOptions);
                     api.dispatch(logout());
                 }
@@ -62,6 +66,7 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
     return result;
 }
 
+//main api 
 export const apiSlice = createApi({
     reducerPath: 'api',
     baseQuery: baseQueryWithReauth,

@@ -5,11 +5,15 @@ import { ToastContext } from "../Context Provider/createContext";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../store/Slice/authSlice";
+import { userValidationSchema } from "../utils/formUtility";
+import FormErrorMessage from "./FormErrorMessage";
 
 export default function Register() {
-  const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
 
+  //react hook form for managing state and validations
   const {
     register,
     handleSubmit,
@@ -22,16 +26,15 @@ export default function Register() {
     const { invalid, isTouched, isDirty } = getFieldState(fieldName);
     return !invalid && (isTouched || isDirty);
   };
-
-  const dispatch = useDispatch();
-  const [registerUser, { /*isError, error,*/ isLoading }] =
-    useRegisterUserMutation();
+  //used register mutation for passing data to server
+  const [registerUser, { isLoading }] = useRegisterUserMutation();
 
   const onSubmit = async (data) => {
     try {
       const response = await registerUser(data).unwrap();
 
       if (response.user) {
+        //setting res data
         dispatch(
           setCredentials({
             user: response.user,
@@ -70,17 +73,11 @@ export default function Register() {
                   name="name"
                   className={`form-control ${errors.name ? "is-invalid" : ""} ${isValid("name") ? "is-valid" : ""}`}
                   aria-invalid={errors.name ? "true" : "false"}
-                  {...register("name", {
-                    minLength: 2,
-                    maxLength: 20,
-                    required: "Name is required",
-                  })}
+                  {...register("name", userValidationSchema.name)}
                   required
                 />
                 <div className="valid-feedback">Looks good!</div>
-                {errors.name && (
-                  <div className="invalid-feedback">{errors.name.message}</div>
-                )}
+                <FormErrorMessage error={errors.name} />
               </div>
               <div className="col-lg mb-3">
                 <label htmlFor="name" className="form-label">
@@ -92,19 +89,11 @@ export default function Register() {
                   name="username"
                   className={`form-control ${errors.username ? "is-invalid" : ""} ${isValid("username") ? "is-valid" : ""}`}
                   aria-invalid={errors.username ? "true" : "false"}
-                  {...register("username", {
-                    minLength: 2,
-                    maxLength: 20,
-                    required: "Username is required",
-                  })}
+                  {...register("username", userValidationSchema.username)}
                   required
                 />
                 <div className="valid-feedback">Looks good!</div>
-                {errors.username && (
-                  <div className="invalid-feedback">
-                    {errors.username.message}
-                  </div>
-                )}
+                <FormErrorMessage error={errors.username} />
               </div>
             </div>
 
@@ -124,11 +113,7 @@ export default function Register() {
                   <option value="other">Other</option>
                 </select>
                 <div className="valid-feedback">Looks good!</div>
-                {errors.gender && (
-                  <div className="invalid-feedback">
-                    {errors.gender.message}
-                  </div>
-                )}
+                <FormErrorMessage error={errors.gender} />
               </div>
               <div className="col-lg mb-3">
                 <label htmlFor="phone" className="form-label">
@@ -142,17 +127,11 @@ export default function Register() {
                   maxLength={10}
                   className={`form-control ${errors.phone ? "is-invalid" : ""} ${isValid("phone") ? "is-valid" : ""}`}
                   aria-invalid={errors.phone ? "true" : "false"}
-                  {...register("phone", {
-                    minLength: 10,
-                    maxLength: 10,
-                    required: "Please enter valid phone number",
-                  })}
+                  {...register("phone", userValidationSchema.phone)}
                   required
                 />
                 <div className="valid-feedback">Looks good!</div>
-                {errors.phone && (
-                  <div className="invalid-feedback">{errors.phone.message}</div>
-                )}
+                <FormErrorMessage error={errors.phone} />
               </div>
             </div>
 
@@ -167,19 +146,11 @@ export default function Register() {
                   name="email"
                   className={`form-control ${errors.email ? "is-invalid" : ""} ${isValid("email") ? "is-valid" : ""}`}
                   aria-invalid={errors.email ? "true" : "false"}
-                  {...register("email", {
-                    pattern: {
-                      value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                      message: "Please enter valid Email-id",
-                    },
-                    required: "Email is required",
-                  })}
+                  {...register("email", userValidationSchema.email)}
                   required
                 />
                 <div className="valid-feedback">Looks good!</div>
-                {errors.email && (
-                  <div className="invalid-feedback">{errors.email.message}</div>
-                )}
+                <FormErrorMessage error={errors.email} />
               </div>
               <div className="col-lg mb-3">
                 <label htmlFor="password" className="form-label">
@@ -191,25 +162,11 @@ export default function Register() {
                   name="password"
                   className={`form-control ${errors.password ? "is-invalid" : ""} ${isValid("password") ? "is-valid" : ""}`}
                   aria-invalid={errors.password ? "true" : "false"}
-                  {...register("password", {
-                    required: "Password is required",
-                    minLength: {
-                      value: 8,
-                      message: "Must be 8 character long",
-                    },
-                    pattern: {
-                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-                      message: "Must contain lowercase, uppercase & numbers!",
-                    },
-                  })}
+                  {...register("password", userValidationSchema.password)}
                   required
                 />
                 <div className="valid-feedback">Looks good!</div>
-                {errors.password && (
-                  <div className="invalid-feedback">
-                    {errors.password.message}
-                  </div>
-                )}
+                <FormErrorMessage error={errors.password} />
               </div>
             </div>
 
@@ -219,22 +176,15 @@ export default function Register() {
                   Address
                 </label>
                 <textarea
-                  // type="text"
                   id="address"
                   name="address"
                   className={`form-control ${errors.address ? "is-invalid" : ""} ${isValid("address") ? "is-valid" : ""}`}
                   aria-invalid={errors.address ? "true" : "false"}
-                  {...register("address", {
-                    required: "Address is required",
-                  })}
+                  {...register("address", userValidationSchema.address)}
                   required
                 />
                 <div className="valid-feedback">Looks good!</div>
-                {errors.address && (
-                  <div className="invalid-feedback">
-                    {errors.address.message}
-                  </div>
-                )}
+                <FormErrorMessage error={errors.address} />
               </div>
             </div>
 
@@ -245,7 +195,6 @@ export default function Register() {
             >
               {isLoading ? "Registering" : "Register"}
             </button>
-            {/* {isError && <div className="invalid-feedback">{error.message}</div>} */}
           </form>
         </div>
       </div>

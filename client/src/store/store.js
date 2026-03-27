@@ -5,6 +5,7 @@ import authSlice from './Slice/authSlice';
 
 export const store = configureStore({
     reducer: {
+        // api n auth reducer
         [apiSlice.reducerPath]: apiSlice.reducer,
         auth: authSlice.reducer,
     },

@@ -13,12 +13,10 @@ import ToastProvider from "./Context Provider/ToastProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GuestRoute from "./components/GuestRoute";
 import { useAccessUserQuery } from "./store/services/authApiSlice";
-import { getLocalStorageData } from "./utils/localStorageUtility";
+import { useSelector } from "react-redux";
 
 function App() {
-  const token = getLocalStorageData(
-    import.meta.env.VITE_ACCESSTOKEN_STORAGEKEY,
-  );
+  const token = useSelector((state) => state.auth.accessToken);
   useAccessUserQuery(undefined, { skip: !token });
 
   return (

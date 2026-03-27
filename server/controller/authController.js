@@ -21,7 +21,7 @@ module.exports.register = async (req, res) => {
         console.log('user created : ', newUser.toJSON())
 
         const userTokenObject = { user_id: newUser.user_id, email: newUser.email }
-        const newAccessToken = createToken(userTokenObject, process.env.ACCESS_TOKEN_KEY, '15s');
+        const newAccessToken = createToken(userTokenObject, process.env.ACCESS_TOKEN_KEY, '5m');
         const newRefreshToken = createToken(userTokenObject, process.env.REFRESH_TOKEN_KEY, '1h');
 
         return res.status(201).json({ message: 'User Registered Successfully!', user: newUser, accessToken: newAccessToken, refreshToken: newRefreshToken })
@@ -48,7 +48,7 @@ module.exports.login = async (req, res) => {
 
     if (isMatched) {
         const userData = { user_id: loggedinUser.user_id, email: loggedinUser.email }
-        const newAccessToken = createToken(userData, process.env.ACCESS_TOKEN_KEY, '15s');
+        const newAccessToken = createToken(userData, process.env.ACCESS_TOKEN_KEY, '5m');
         const newRefreshToken = createToken(userData, process.env.REFRESH_TOKEN_KEY, '1h');
 
         return res.status(200).json({ message: 'Logged in Successfully!', user: loggedinUser, accessToken: newAccessToken, refreshToken: newRefreshToken })
@@ -62,7 +62,6 @@ module.exports.logout = async (req, res) => {
 }
 
 module.exports.authenticateUserOnRefresh = async (req, res) => {
-    console.log('::::::: authenticateUserOnRefresh ::::::')
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
@@ -91,10 +90,11 @@ module.exports.authenticateUserOnRefresh = async (req, res) => {
 
 module.exports.refresh = async (req, res) => {
 
+    console.log('refresh')
     const refreshToken = req.body.refreshToken;
-    console.log('refresh ::::::::::::::::::::: ', refreshToken)
     try {
 
+        console.log('!refresh')
         if (!refreshToken)
             return res.status(403).json({ message: 'Invalid Creadentials' });
 
@@ -102,15 +102,18 @@ module.exports.refresh = async (req, res) => {
 
         user = await User.findOne({ where: { user_id: user.user_id } })
 
+        console.log('!user')
         if (!user)
             return res.status(403).json({ message: 'Invalid Creadentials' });
 
         const userData = { user_id: user.user_id, email: user.email }
-        const newAccessToken = createToken(userData, process.env.ACCESS_TOKEN_KEY, '15s');
+        const newAccessToken = createToken(userData, process.env.ACCESS_TOKEN_KEY, '5m');
         const newRefreshToken = createToken(userData, process.env.REFRESH_TOKEN_KEY, '1h');
 
+        console.log('return res')
         return res.status(200).json({ message: 'Refresh Successfull', accessToken: newAccessToken, refreshToken: newRefreshToken, user: user })
     } catch (error) {
+        console.log('return err')
         return res.status(500).json({ message: error.message });
     }
 }

@@ -17,7 +17,7 @@ const authApiSlice = apiSlice.injectEndpoints({
         }),
         refreshToken: builder.mutation({
             query: (refreshToken) => ({ url: 'auth/refresh', method: 'POST', body: { refreshToken } }),
-            invalidatesTags: ['User'],
+            invalidatesTags: ['User', 'Auth'],
         }),
         logoutUser: builder.mutation({
             query: () => ({ url: 'auth/logout', method: "POST" }),
@@ -27,5 +27,5 @@ const authApiSlice = apiSlice.injectEndpoints({
     overrideExisting: false,
 })
 
-export const { useRegisterUserMutation, useLoginUserMutation, useAccessUserQuery, useRefreshTokenMutation,useLogoutUserMutation } = authApiSlice
+export const { useRegisterUserMutation, useLoginUserMutation, useAccessUserQuery, useRefreshTokenMutation, useLogoutUserMutation } = authApiSlice
 export default authApiSlice
