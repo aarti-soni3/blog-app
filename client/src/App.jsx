@@ -10,10 +10,16 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import { ToastContainer } from "react-toastify";
 import ToastProvider from "./Context Provider/ToastProvider";
-// import { useGetAllPostsQuery } from "./store/services/postApi";
+import ProtectedRoute from "./components/ProtectedRoute";
+import GuestRoute from "./components/GuestRoute";
+import { useAccessUserQuery } from "./store/services/authApiSlice";
+import { getLocalStorageData } from "./utils/localStorageUtility";
 
 function App() {
-  // const { isLoading, data } = useGetAllPostsQuery();
+  const token = getLocalStorageData(
+    import.meta.env.VITE_ACCESSTOKEN_STORAGEKEY,
+  );
+  useAccessUserQuery(undefined, { skip: !token });
 
   return (
     <>
@@ -22,17 +28,18 @@ function App() {
         <BrowserRouter>
           <NavBar />
 
-          {/* {isLoading && <h5>loading....</h5>} */}
-          {/* {data && <p>{JSON.stringify(data)}</p>} */}
-
           <div className="d-flex justify-content-center mt-5">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/profile" element={<Profile />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route element={<GuestRoute />}>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+              </Route>
+              <Route element={<ProtectedRoute />}>
+                <Route path="/profile" element={<Profile />} />
+              </Route>
             </Routes>
           </div>
         </BrowserRouter>

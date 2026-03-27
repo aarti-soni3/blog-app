@@ -1,9 +1,10 @@
-if (!process.env.NODE_ENV === 'production')
+if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
+}
 
 const express = require('express');
 const cors = require('cors');
-const {connectMySQLDatabase} = require('./config/db');
+const { connectMySQLDatabase } = require('./config/db');
 const authRouter = require('./routes/authRouter');
 const postRouter = require('./routes/postRouter');
 const userRouter = require('./routes/userRouter');

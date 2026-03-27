@@ -1,14 +1,18 @@
 // import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLoginUserMutation } from "../store/services/authSlice";
+import { useLoginUserMutation } from "../store/services/authApiSlice";
 import { useContext } from "react";
 import { ToastContext } from "../Context Provider/createContext";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../store/Slice/authSlice";
+// import { setLocalStorageData } from "../utils/localStorageUtility";
 
 export default function Login() {
   const [loginUser, { isLoading /*error, isError*/ }] = useLoginUserMutation();
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
 
   const {
@@ -26,15 +30,20 @@ export default function Login() {
   const onSubmit = async (data) => {
     try {
       const response = await loginUser(data).unwrap();
-
       if (response.user) {
+        dispatch(
+          setCredentials({
+            user: response.user,
+            accessToken: response.accessToken,
+            refreshToken: response.refreshToken,
+          }),
+        );
         reset();
         showSuccessFeedback("You're logged in !");
         navigate("/");
       }
     } catch (error) {
-      showErrorFeedback(error.data.message);
-      console.log(error);
+      showErrorFeedback(error.data.message || error.message);
     }
   };
 

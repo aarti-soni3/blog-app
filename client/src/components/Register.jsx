@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
-import { useRegisterUserMutation } from "../store/services/authSlice";
+import { useRegisterUserMutation } from "../store/services/authApiSlice";
 import { useContext } from "react";
 import { ToastContext } from "../Context Provider/createContext";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../store/Slice/authSlice";
 
 export default function Register() {
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
@@ -21,6 +23,7 @@ export default function Register() {
     return !invalid && (isTouched || isDirty);
   };
 
+  const dispatch = useDispatch();
   const [registerUser, { /*isError, error,*/ isLoading }] =
     useRegisterUserMutation();
 
@@ -29,6 +32,13 @@ export default function Register() {
       const response = await registerUser(data).unwrap();
 
       if (response.user) {
+        dispatch(
+          setCredentials({
+            user: response.user,
+            accessToken: response.accessToken,
+            refreshToken: response.refreshToken,
+          }),
+        );
         reset();
         showSuccessFeedback("User Registered Successfully!");
         navigate("/");
