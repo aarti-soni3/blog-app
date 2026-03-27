@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize')
 const { getSequelize } = require('../config/db')
-const bcrypt = require('bcrypt');
 const { hashedPassword } = require('../utils/hashedPasswordUtility');
 
 const sequelize = getSequelize()
@@ -87,13 +86,5 @@ const User = sequelize.define(
 User.beforeCreate(async (user, options) => {
     user.password = await hashedPassword(user.password)
 });
-
-(async () => {
-    await sequelize.sync({ force: false }).then(() => {
-        console.log('database & table created !');
-    }).catch((err) => {
-        console.log('can not create db & table', err)
-    })
-})();
 
 module.exports = User

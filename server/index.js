@@ -6,7 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const { connectMySQLDatabase } = require('./config/db');
 const authRouter = require('./routes/authRouter');
-const postRouter = require('./routes/postRouter');
+const blogRouter = require('./routes/blogRouter');
 const userRouter = require('./routes/userRouter');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -22,7 +22,7 @@ app.use(express.json())
 
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
-app.use("/api/posts", postRouter);
+app.use("/api/blogs", blogRouter);
 
 
 app.listen(port, () => {
