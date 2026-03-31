@@ -1,20 +1,38 @@
+import { useSelector } from "react-redux";
 import { trimSentence } from "../../utils/TextUtility";
+import { useNavigate } from "react-router";
 
 export default function BlogCard({ blog }) {
+  const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.auth);
+
+  const handleOnClick = () => {
+    navigate(`/blogs/${blog.blogId}`);
+  };
+
+  let isLoggedinUser;
+  if (user) {
+    isLoggedinUser = user.userId === blog?.User?.userId;
+    console.log(isLoggedinUser)
+  }
+
   return (
-    <div className="col ">
-      <div className="card m-2 shadow-sm">
+    <div className="col" role="button" onClick={handleOnClick}>
+      <div className="card m-2 shadow-sm h-100">
         <img
-          src="https://images.unsplash.com/photo-1623612374192-bb28178ed476?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          src={blog?.image}
           className="card-img-top"
           alt="image"
           loading="lazy"
         />
         <div className="card-body">
           <h5 className="card-title">{trimSentence(blog.title)}</h5>
-          <p className="card-text">{trimSentence(blog.description,100)}</p>
+          <p className="card-text ">{trimSentence(blog.description, 80)}</p>
           <p className="card-text">
-            <small className="text-body-secondary">{blog.user_id}</small>
+            <small className="text-body-secondary">
+              posted by {isLoggedinUser ? "You" : blog?.User?.username}
+            </small>
           </p>
         </div>
       </div>

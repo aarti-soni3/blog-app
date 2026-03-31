@@ -1,11 +1,11 @@
 import { useGetAllBlogsQuery } from "../store/services/blogApiSlice";
-import BlogCards from "./Blog/BlogCard";
 import Blogs from "./Blog/Blogs";
 
 export default function Home() {
-  const { data: blogs, isLoading } = useGetAllBlogsQuery();
+  const { data: blogs, isLoading, error } = useGetAllBlogsQuery();
 
   if (isLoading) return <h4>Loading...</h4>;
+  if (error) return <h4>Something went wrong!</h4>;
 
   return (
     <div className="d-flex flex-column w-100 mx-5">

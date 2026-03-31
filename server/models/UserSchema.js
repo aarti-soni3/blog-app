@@ -7,11 +7,12 @@ const sequelize = getSequelize()
 const User = sequelize.define(
     'User',
     {
-        user_id: {
+        userId: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
-            allowNull: false
+            allowNull: false,
+            field: 'user_id'
         },
         name: {
             type: DataTypes.STRING,
@@ -74,14 +75,25 @@ const User = sequelize.define(
             allowNull: false,
         },
     }, {
+    underscored: true,
     defaultScope: {
         attributes: { exclude: ['password'] }
     },
     scopes: {
         withPassword: { attributes: {} }
     }
-}
-)
+})
+
+// const create = async () => {
+//     await sequelize.sync({ force: false }).then(() => {
+//         console.log('database & table created !');
+//     }).catch((err) => {
+//         console.log('can not create db & table', err)
+//     })
+// }
+
+// create();
+
 
 User.beforeCreate(async (user, options) => {
     user.password = await hashedPassword(user.password)

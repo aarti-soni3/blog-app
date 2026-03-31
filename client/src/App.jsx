@@ -1,6 +1,6 @@
 import "./App.css";
 import NavBar from "./components/NavBar";
-import { BrowserRouter } from "react-router";
+import { BrowserRouter, Navigate } from "react-router";
 import { Routes, Route } from "react-router";
 import Profile from "./components/Profile";
 import About from "./components/About";
@@ -14,6 +14,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import GuestRoute from "./components/GuestRoute";
 import { useAccessUserQuery } from "./store/services/authApiSlice";
 import { useSelector } from "react-redux";
+import BlogDetails from "./components/Blog/BlogDetails";
 
 function App() {
   const token = useSelector((state) => state.auth.accessToken);
@@ -28,7 +29,9 @@ function App() {
 
           <div className="d-flex justify-content-center mt-5">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Navigate to={"/blogs"} replace />} />
+              <Route path="/blogs" element={<Home />} />
+              <Route path="/blogs/:id" element={<BlogDetails />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route element={<GuestRoute />}>

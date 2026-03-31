@@ -1,12 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, NavLink } from "react-router";
 import { useLogoutUserMutation } from "../store/services/authApiSlice";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ToastContext } from "../Context Provider/createContext";
 import { logout } from "../store/Slice/authSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import CreateBlogModal from "./Blog/CreateBlogModal";
 
 export default function NavBar() {
   const { user } = useSelector((state) => state?.auth);
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const dispatch = useDispatch();
   const [logoutUser] = useLogoutUserMutation();
@@ -110,22 +118,37 @@ export default function NavBar() {
                   </li>
                 </>
               ) : (
-                <li className="nav-item">
-                  <NavLink
-                    to="/"
-                    onClick={handleLogout}
-                    className={({ isActive }) =>
-                      isActive ? "nav-link active" : "nav-link"
-                    }
-                  >
-                    Logout
-                  </NavLink>
-                </li>
+                <>
+                  <li className="nav-item">
+                    <NavLink
+                      to="/"
+                      onClick={handleShow}
+                      className={({ isActive }) =>
+                        isActive ? "nav-link active" : "nav-link"
+                      }
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} /> Write
+                    </NavLink>
+                  </li>
+
+                  <li className="nav-item">
+                    <NavLink
+                      to="/"
+                      onClick={handleLogout}
+                      className={({ isActive }) =>
+                        isActive ? "nav-link active" : "nav-link"
+                      }
+                    >
+                      Logout
+                    </NavLink>
+                  </li>
+                </>
               )}
             </ul>
           </div>
         </div>
       </nav>
+      <CreateBlogModal handleClose={handleClose} show={show} />
     </>
   );
 }

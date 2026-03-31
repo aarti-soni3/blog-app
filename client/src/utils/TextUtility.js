@@ -1,7 +1,8 @@
-export const trimSentence = (text, count = 30) => {
-    console.log(text.toString())
+export const trimSentence = (text, count = 30, isDotAllowed = true) => {
     if (typeof text !== 'string')
         return
-
-    return text.slice(0, count).trim()+'...';
+    if (isDotAllowed)
+        return text.slice(0, count).trim() + '...';
+    else
+        return text.slice(0, count).trim();
 }

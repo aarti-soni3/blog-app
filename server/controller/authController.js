@@ -20,7 +20,7 @@ module.exports.register = async (req, res) => {
         const newUser = await User.create({ ...userData });
         console.log('user created : ', newUser.toJSON())
 
-        const userTokenObject = { user_id: newUser.user_id, email: newUser.email }
+        const userTokenObject = { userId: newUser.userId, email: newUser.email }
         const newAccessToken = createToken(userTokenObject, process.env.ACCESS_TOKEN_KEY, '5m');
         const newRefreshToken = createToken(userTokenObject, process.env.REFRESH_TOKEN_KEY, '1h');
 
@@ -47,7 +47,7 @@ module.exports.login = async (req, res) => {
     const isMatched = await verifyHashedPassword(user.password, loggedinUser.password)
 
     if (isMatched) {
-        const userData = { user_id: loggedinUser.user_id, email: loggedinUser.email }
+        const userData = { userId: loggedinUser.userId, email: loggedinUser.email }
         const newAccessToken = createToken(userData, process.env.ACCESS_TOKEN_KEY, '5m');
         const newRefreshToken = createToken(userData, process.env.REFRESH_TOKEN_KEY, '1h');
 
@@ -71,10 +71,10 @@ module.exports.authenticateUserOnRefresh = async (req, res) => {
 
     try {
         const user = verifyToken(token, process.env.ACCESS_TOKEN_KEY)
-        const storedUser = await User.findOne({ where: { user_id: user.user_id } })
+        const storedUser = await User.findOne({ where: { userId: user.userId } })
 
         const userData = {
-            user_id: storedUser.user_id,
+            userId: storedUser.userId,
             username: storedUser.username,
             name: storedUser.name,
             gender: storedUser.gender,
@@ -90,30 +90,25 @@ module.exports.authenticateUserOnRefresh = async (req, res) => {
 
 module.exports.refresh = async (req, res) => {
 
-    console.log('refresh')
     const refreshToken = req.body.refreshToken;
     try {
 
-        console.log('!refresh')
         if (!refreshToken)
             return res.status(403).json({ message: 'Invalid Creadentials' });
 
         let user = await verifyToken(refreshToken, process.env.REFRESH_TOKEN_KEY)
 
-        user = await User.findOne({ where: { user_id: user.user_id } })
+        user = await User.findOne({ where: { userId: user.userId } })
 
-        console.log('!user')
         if (!user)
             return res.status(403).json({ message: 'Invalid Creadentials' });
 
-        const userData = { user_id: user.user_id, email: user.email }
+        const userData = { userId: user.userId, email: user.email }
         const newAccessToken = createToken(userData, process.env.ACCESS_TOKEN_KEY, '5m');
         const newRefreshToken = createToken(userData, process.env.REFRESH_TOKEN_KEY, '1h');
 
-        console.log('return res')
         return res.status(200).json({ message: 'Refresh Successfull', accessToken: newAccessToken, refreshToken: newRefreshToken, user: user })
     } catch (error) {
-        console.log('return err')
         return res.status(500).json({ message: error.message });
     }
 }

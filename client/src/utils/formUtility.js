@@ -36,3 +36,27 @@ export const userValidationSchema = {
         required: "Address is required",
     },
 };
+
+export const blogValidationSchema = {
+    title: {
+        required: "Title is required",
+        minLength: {
+            value: 3,
+            message: 'Title must be more than 3 characters!'
+        },
+        maxLength: {
+            value: 40,
+            message: 'Title must be less than 40 characters!'
+        },
+    },
+    image: {
+        required: "Image is required",
+    },
+    description: {
+        required: "Description is required",
+        minLength: {
+            value: 5,
+            message: "Description must be at least 5 characters"
+        },
+    },
+};
