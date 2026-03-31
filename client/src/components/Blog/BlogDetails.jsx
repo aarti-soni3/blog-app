@@ -1,8 +1,8 @@
 import { useParams } from "react-router";
 import { useGetBlogQuery } from "../../store/services/blogApiSlice";
-import { trimSentence } from "../../utils/TextUtility";
 import { useSelector } from "react-redux";
-import Button from "react-bootstrap/esm/Button";
+import PostedBySection from "./PostedBySection";
+
 export default function BlogDetails() {
   const id = useParams("id");
   const { data, isLoading, error } = useGetBlogQuery(id.id);
@@ -23,22 +23,31 @@ export default function BlogDetails() {
       <div className="container-md">
         <div className="m-4">
           <h3 className="card-title">{blog.title}</h3>
-          <div className="card-text d-flex gap-1 ">
+          <PostedBySection
+            username={blog.User?.username}
+            isLoggedinUser={isLoggedinUser}
+            showUserProfile={true}
+          />
+          {/* <div className="card-text d-flex gap-1 ">
             <div className="rounded-circle py-1 px-3 m-1 bg-secondary fs-5 border">
               {trimSentence(blog.User?.username, 1, false)}
             </div>
-            <p className="text-body my-auto fs-6">
-              posted by {isLoggedinUser ? "You" : blog.User?.username}
-            </p>
-            {isLoggedinUser && (
-              <>
-                <Button variant="outline-primary m-1 my-2 ">Edit</Button>
-                <Button variant="outline-danger m-1 my-2" size="sm">
-                  Delete
-                </Button>
-              </>
-            )}
-          </div>
+            <Stack direction="horizontal" gap={2}>
+              <p className="text-body my-auto fs-6">
+                posted by {isLoggedinUser ? "You" : blog.User?.username}
+              </p>
+              {isLoggedinUser && (
+                <p className="ms-4 my-0">
+                  <Button variant="outline-primary m-1 my-2" size="sm">
+                    Edit
+                  </Button>
+                  <Button variant="outline-danger m-1 my-2" size="sm">
+                    Delete
+                  </Button>
+                </p>
+              )}
+            </Stack>
+          </div> */}
           <br />
           <img
             src={blog.image}

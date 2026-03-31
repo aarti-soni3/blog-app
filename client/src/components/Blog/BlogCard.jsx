@@ -1,6 +1,8 @@
 import { useSelector } from "react-redux";
 import { trimSentence } from "../../utils/TextUtility";
 import { useNavigate } from "react-router";
+import Button from "react-bootstrap/esm/Button";
+import PostedBySection from "./PostedBySection";
 
 export default function BlogCard({ blog }) {
   const navigate = useNavigate();
@@ -14,7 +16,6 @@ export default function BlogCard({ blog }) {
   let isLoggedinUser;
   if (user) {
     isLoggedinUser = user.userId === blog?.User?.userId;
-    console.log(isLoggedinUser)
   }
 
   return (
@@ -29,11 +30,26 @@ export default function BlogCard({ blog }) {
         <div className="card-body">
           <h5 className="card-title">{trimSentence(blog.title)}</h5>
           <p className="card-text ">{trimSentence(blog.description, 80)}</p>
-          <p className="card-text">
+          <PostedBySection
+            username={blog.User?.username}
+            isLoggedinUser={isLoggedinUser}
+            showUserProfile={false}
+          />
+          {/* <div className="card-text d-flex align-items-center">
             <small className="text-body-secondary">
               posted by {isLoggedinUser ? "You" : blog?.User?.username}
             </small>
-          </p>
+            {isLoggedinUser && (
+              <div className="ms-auto">
+                <Button variant="outline-primary m-1 my-2 " size="sm">
+                  Edit
+                </Button>
+                <Button variant="outline-danger m-1 my-2" size="sm">
+                  Delete
+                </Button>
+              </div>
+            )}
+          </div> */}
         </div>
       </div>
     </div>
