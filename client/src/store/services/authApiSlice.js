@@ -5,7 +5,7 @@ const authApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         accessUser: builder.query({
             query: () => ({ url: 'auth/access', method: 'GET', }),
-            invalidatesTags: ['User']
+            providesTags: ['User']
         }),
         loginUser: builder.mutation({
             query: (body) => ({ url: 'auth/login', method: 'POST', body: body }),

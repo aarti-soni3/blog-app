@@ -6,27 +6,37 @@ import { useGetAllCategoryQuery } from "../../store/services/categoryApiSlice";
 import { useForm } from "react-hook-form";
 import { blogValidationSchema } from "../../utils/formUtility";
 import FormErrorMessage from "../FormErrorMessage";
-import { useCreateBlogMutation } from "../../store/services/blogApiSlice";
+import { useUpdateBlogMutation } from "../../store/services/blogApiSlice";
 import { ToastContext } from "../../Context Provider/createContext";
+import Image from "react-bootstrap/Image";
 
-export default function CreateBlogModal({ handleClose, show }) {
+export default function UpdateBlogModal({ blog, handleClose, show }) {
   const { data, isLoading, error } = useGetAllCategoryQuery();
-  const [createBlog, { isLoading: isLoadingProcess }] = useCreateBlogMutation();
+  const [updateBlog, { isLoading: isLoadingProcess }] = useUpdateBlogMutation();
 
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
 
+  const categories = data?.category;
+  const getSelectedCategory = () => {
+    if (blog)
+      return categories.find(
+        (category) => category.categoryId === blog?.Category?.categoryId,
+      );
+    else return null;
+  };
+
   const {
     register,
-    reset,
     getFieldState,
     handleSubmit,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      title: "",
-      description: "",
+      title: blog.title,
+      description: blog.description,
       image: null,
-      category: data && data.category[0].name,
+      isDeleteImage: false,
+      category: getSelectedCategory()?.name,
     },
     mode: "onSubmit",
   });
@@ -42,22 +52,25 @@ export default function CreateBlogModal({ handleClose, show }) {
       const formData = new FormData();
       formData.append("title", data.title);
       formData.append("description", data.description);
-      if (data.image && data.image[0]) formData.append("image", data.image[0]);
+      if (data.image !== null && data.image && data.image[0]) {
+        formData.append("image", data.image[0]);
+      }
       formData.append("category", data.category);
-      console.log(formData);
-      
-      const response = await createBlog(formData).unwrap();
+      formData.append("isDeleteImage", data.isDeleteImage);
+
+      const response = await updateBlog({
+        id: blog.blogId,
+        data: formData,
+      }).unwrap();
 
       if (response) {
-        showSuccessFeedback("Blog Created!");
-        reset();
+        showSuccessFeedback("Blog Updated!");
       }
     } catch (error) {
       showErrorFeedback(error?.message);
       console.log(error);
-    } finally {
-      handleClose();
     }
+    handleClose();
   };
 
   return (
@@ -75,8 +88,8 @@ export default function CreateBlogModal({ handleClose, show }) {
           onSubmit={handleSubmit(onSubmit)}
           encType="multipart/form-data"
         >
-          <Modal.Header closeButton>
-            <Modal.Title>Create Blog</Modal.Title>
+          <Modal.Header closeButton onClick={handleClose}>
+            <Modal.Title>Update Blog</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form.Group className="mb-3" controlId="title">
@@ -107,11 +120,21 @@ export default function CreateBlogModal({ handleClose, show }) {
                   })}
               </Form.Select>
             </Form.Group>
+            {blog.image && (
+              <Form.Group>
+                <Form.Label>Select for delete image</Form.Label>
+                <div className="d-flex gap-2">
+                  <Form.Check type="checkbox" {...register("isDeleteImage")} />
+                  <Image src={blog.thumbnail} thumbnail />
+                </div>
+              </Form.Group>
+            )}
+            <br />
             <Form.Group controlId="file" className="mb-3">
-              <Form.Label>Select Image</Form.Label>
+              <Form.Label>Image</Form.Label>
               <Form.Control
                 type="file"
-                {...register("image", blogValidationSchema.image)}
+                {...register("image")}
                 isInvalid={!!errors.image}
                 isValid={isValid("image")}
                 name="image"
@@ -141,7 +164,7 @@ export default function CreateBlogModal({ handleClose, show }) {
               type="submit"
               disabled={isLoadingProcess ? true : false}
             >
-              {isLoadingProcess ? "Posting..." : "Post"}
+              {isLoadingProcess ? "Updating..." : "Update"}
             </Button>
           </Modal.Footer>
         </Form>

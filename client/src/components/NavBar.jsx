@@ -36,9 +36,16 @@ export default function NavBar() {
         data-bs-theme="dark"
       >
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive
+                ? "nav-link active navbar-brand"
+                : "nav-link navbar-brand"
+            }
+          >
             Blog App
-          </a>
+          </NavLink>
           <button
             className="navbar-toggler"
             type="button"

@@ -20,11 +20,11 @@ const Blog = sequelize.define(
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
-            allowNull: false
+            allowNull: true
         },
         image: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         title: {
             type: DataTypes.STRING,
@@ -44,6 +44,15 @@ const Blog = sequelize.define(
                     args: 10,
                     msg: 'description must be more than 10 charater long'
                 },
+            }
+        },
+        thumbnail: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                if (this.image === null || this.image === undefined)
+                    return null;
+                else
+                    return this.image.replace('/upload', '/upload/w_200')
             }
         },
     },
@@ -72,14 +81,14 @@ Blog.belongsTo(Category, {
     type: DataTypes.UUID
 })
 
-// const create = async () => {
-//     await sequelize.sync({ force: false }).then(() => {
-//         console.log('database & table created !');
-//     }).catch((err) => {
-//         console.log('can not create db & table', err)
-//     })
-// }
+const create = async () => {
+    await sequelize.sync({ force: false }).then(() => {
+        console.log('database & table created !');
+    }).catch((err) => {
+        console.log('can not create db & table', err)
+    })
+}
 
-// create();
+create();
 
 module.exports = Blog

@@ -5,7 +5,12 @@ const { getAuthToken, verifyToken } = require("../utils/TokenUtility");
 
 module.exports.getAllBlogs = async (req, res) => {
     try {
-        const blogs = await Blog.findAll({ include: [{ model: User, attributes: ['username', 'userId'] }] });
+        const blogs = await Blog.findAll({
+            include: [
+                { model: User, attributes: ['username', 'userId'] },
+                { model: Category, attributes: ['categoryId', 'name'] }
+            ]
+        });
 
         if (!blogs) {
             return res.json({ message: 'No blogs available!' });
@@ -21,7 +26,12 @@ module.exports.getBlog = async (req, res) => {
     const id = req.params.id;
 
     try {
-        const blog = await Blog.findByPk(id, { include: [{ model: User, attributes: ['userId', 'username'] }] });
+        const blog = await Blog.findByPk(id, {
+            include: [
+                { model: User, attributes: ['userId', 'username'] },
+                { model: Category, attributes: ['categoryId', 'name'] }
+            ]
+        });
 
         if (!blog)
             return res.status(404).json({ message: 'no blog found!' });
@@ -53,7 +63,7 @@ module.exports.createBlog = async (req, res) => {
         const newBlog = await Blog.create({ ...blog });
 
         if (!newBlog)
-            return res.status(200).json({ message: 'not added' });
+            return res.status(404).json({ message: 'not added' });
 
         return res.status(200).json({ message: 'Blog created!' })
 
@@ -61,4 +71,55 @@ module.exports.createBlog = async (req, res) => {
         console.log(error)
         return res.status(500).json({ message: error.message });
     }
+}
+
+module.exports.updateBlog = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = req.body;
+        const file = req.file;
+
+        const category = await Category.findOne({ where: { name: data.category } });
+        if (!category) return res.status(400).json({ message: "Invalid Category" });
+
+        const updatedData = {
+            title: data.title,
+            description: data.description,
+            categoryId: category.categoryId,
+        }
+
+        if (data.isDeleteImage)
+            updatedData.image = null
+
+        if (file)
+            updatedData.image = file.path
+
+        const [rowsAffected] = await Blog.update(updatedData, { where: { blogId: id } });
+
+        if (rowsAffected === 0)
+            return res.status(404).json({ message: 'Blog not found or no Changes Made!' });
+
+        return res.status(200).json({ message: 'Blog Updated!' })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+module.exports.deleteBlog = async (req, res) => {
+
+    const id = req.params.id;
+
+    console.log('id: ', id)
+
+    if (id === undefined || id === null)
+        return res.status(404).json({ error: { message: 'Invalid Id' } })
+
+    const rowsAffected = await Blog.destroy({ where: { blogId: id } });
+
+    if (rowsAffected === 0)
+        return res.status(404).json({ message: 'Unable to delete blog' });
+
+    return res.status(200).json({ message: 'Blog Deleted!' });
 }
