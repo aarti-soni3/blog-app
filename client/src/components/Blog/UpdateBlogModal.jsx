@@ -18,7 +18,8 @@ export default function UpdateBlogModal({ blog, handleClose, show }) {
 
   const categories = data?.category;
   const getSelectedCategory = () => {
-    if (blog)
+    console.log(categories, blog);
+    if (categories)
       return categories.find(
         (category) => category.categoryId === blog?.Category?.categoryId,
       );
@@ -47,7 +48,6 @@ export default function UpdateBlogModal({ blog, handleClose, show }) {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       const formData = new FormData();
       formData.append("title", data.title);
@@ -72,6 +72,8 @@ export default function UpdateBlogModal({ blog, handleClose, show }) {
     }
     handleClose();
   };
+
+  if (isLoading) return <h3>Loading...</h3>;
 
   return (
     <>

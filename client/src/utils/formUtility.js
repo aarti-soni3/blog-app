@@ -60,3 +60,17 @@ export const blogValidationSchema = {
         },
     },
 };
+
+export const commentValidationSchema = {
+    description: {
+        required: "Write anything to post comment!",
+        minLength: {
+            value: 2,
+            message: "Description must be at least 2 characters"
+        },
+        maxLength: {
+            value: 60,
+            message: 'Title must be less than 60 characters!'
+        },
+    },
+}

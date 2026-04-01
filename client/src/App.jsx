@@ -15,19 +15,20 @@ import GuestRoute from "./components/GuestRoute";
 import { useAccessUserQuery } from "./store/services/authApiSlice";
 import { useSelector } from "react-redux";
 import BlogDetails from "./components/Blog/BlogDetails";
+import Footer from "./components/Footer";
 
-function App() {
+export default function App() {
   const token = useSelector((state) => state.auth.accessToken);
   useAccessUserQuery(undefined, { skip: !token });
 
   return (
-    <>
+    <section className="d-flex flex-column min-vh-100">
       <ToastContainer />
       <ToastProvider>
         <BrowserRouter>
           <NavBar />
 
-          <div className="d-flex justify-content-center mt-5">
+          <main className="d-flex justify-content-center mt-5 flex-grow-1">
             <Routes>
               <Route path="/" element={<Navigate to={"/blogs"} replace />} />
               <Route path="/blogs" element={<Home />} />
@@ -42,11 +43,12 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
               </Route>
             </Routes>
-          </div>
+          </main>
+          <br />
+          <br />
+          <Footer />
         </BrowserRouter>
       </ToastProvider>
-    </>
+    </section>
   );
 }
-
-export default App;

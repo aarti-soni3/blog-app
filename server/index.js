@@ -9,6 +9,7 @@ const authRouter = require('./routes/authRouter');
 const blogRouter = require('./routes/blogRouter');
 const userRouter = require('./routes/userRouter');
 const categoryRouter = require('./routes/categoryRouter');
+const commentRouter = require('./routes/commentRouter');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -25,6 +26,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/blogs", blogRouter);
 app.use("/api/category", categoryRouter);
+app.use("/api/comments", commentRouter);
 
 
 app.listen(port, () => {

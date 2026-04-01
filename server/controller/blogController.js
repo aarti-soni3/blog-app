@@ -1,5 +1,6 @@
 const Blog = require("../models/BlogSchema");
 const Category = require("../models/CategorySchema");
+const Comment = require("../models/CommentSchema");
 const User = require("../models/UserSchema");
 const { getAuthToken, verifyToken } = require("../utils/TokenUtility");
 
@@ -29,7 +30,13 @@ module.exports.getBlog = async (req, res) => {
         const blog = await Blog.findByPk(id, {
             include: [
                 { model: User, attributes: ['userId', 'username'] },
-                { model: Category, attributes: ['categoryId', 'name'] }
+                { model: Category, attributes: ['categoryId', 'name'] },
+                {
+                    model: Comment,
+                    attributes: ['commentId', 'description', 'createdAt'],
+                    include: [{ model: User, attributes: ['userId', 'username'] }],
+                    order: [['createdAt', 'DESC']]
+                }
             ]
         });
 

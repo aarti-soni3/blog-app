@@ -40,11 +40,14 @@ export default function NavBar() {
             to="/"
             className={({ isActive }) =>
               isActive
-                ? "nav-link active navbar-brand"
-                : "nav-link navbar-brand"
+                ? "nav-link active navbar-brand p-0"
+                : "nav-link navbar-brand p-0"
             }
           >
-            Blog App
+            <div className="d-flex gap-3 align-items-start">
+              <img src="/public/logo.png" width={35} height={40} />
+              <h3>Content Corner</h3>
+            </div>
           </NavLink>
           <button
             className="navbar-toggler"

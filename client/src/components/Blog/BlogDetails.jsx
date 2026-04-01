@@ -3,6 +3,7 @@ import { useGetBlogQuery } from "../../store/services/blogApiSlice";
 import { useSelector } from "react-redux";
 import PostedBySection from "./PostedBySection";
 import Image from "react-bootstrap/esm/Image";
+import CommentSection from "../Comment/CommentSection";
 
 export default function BlogDetails() {
   const id = useParams("id");
@@ -46,6 +47,11 @@ export default function BlogDetails() {
             </p>
           </div>
         </div>
+
+        <CommentSection
+          blogId={blog.blogId}
+          comments={blog?.Comments}
+        />
       </div>
     </>
   );
