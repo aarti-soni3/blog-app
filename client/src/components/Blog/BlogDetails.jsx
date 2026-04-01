@@ -48,10 +48,7 @@ export default function BlogDetails() {
           </div>
         </div>
 
-        <CommentSection
-          blogId={blog.blogId}
-          comments={blog?.Comments}
-        />
+        <CommentSection blogId={blog.blogId} comments={blog?.Comments} />
       </div>
     </>
   );

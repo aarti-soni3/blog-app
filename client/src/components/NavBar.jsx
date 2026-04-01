@@ -45,7 +45,7 @@ export default function NavBar() {
             }
           >
             <div className="d-flex gap-3 align-items-start">
-              <img src="/public/logo.png" width={35} height={40} />
+              <img src="/logo.png" width={35} height={40} />
               <h3>Content Corner</h3>
             </div>
           </NavLink>

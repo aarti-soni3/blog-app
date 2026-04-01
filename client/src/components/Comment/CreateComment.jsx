@@ -6,6 +6,7 @@ import { ToastContext } from "../../Context Provider/createContext";
 import { commentValidationSchema } from "../../utils/formUtility";
 import FormErrorMessage from "../FormErrorMessage";
 import { useCreateCommentMutation } from "../../store/services/commentApiSlice";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
 
 export default function CreateComment({ blogId }) {
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
@@ -50,16 +51,26 @@ export default function CreateComment({ blogId }) {
       <div className="container-md d-flex flex-column p-2 mb-5">
         <Form noValidate onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3" controlId="description">
-            <Form.Control
-              as="textarea"
-              rows={3}
-              placeholder="Write Comment..."
-              required
-              {...register("description", commentValidationSchema.description)}
-              isInvalid={!!errors.description}
-              isValid={isValid("description")}
-            />
-            <FormErrorMessage error={errors.description} />
+            <FloatingLabel
+              controlId="floatingDescription"
+              label="Write comment..."
+              className="mb-3"
+            >
+              <Form.Control
+                as="textarea"
+                rows={3}
+                placeholder="Write Comment..."
+                required
+                {...register(
+                  "description",
+                  commentValidationSchema.description,
+                )}
+                isInvalid={!!errors.description}
+                isValid={isValid("description")}
+                style={{ height: "100px" }}
+              />
+              <FormErrorMessage error={errors.description} />
+            </FloatingLabel>
           </Form.Group>
           <Button
             variant="primary"

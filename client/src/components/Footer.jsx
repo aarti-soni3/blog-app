@@ -11,7 +11,7 @@ export default function Footer() {
           <div className="d-flex gap-2 justify-content-between">
             <div className="w-50">
               <div className="d-flex gap-3 pb-3 align-items-end">
-                <img src="/public/logo.png" width={50} height={60} />
+                <img src="/logo.png" width={50} height={60} />
                 <h2>Content Corner</h2>
               </div>
               <p className="text-start">

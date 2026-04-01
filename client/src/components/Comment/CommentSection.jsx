@@ -3,7 +3,6 @@ import CreateComment from "./CreateComment";
 import Stack from "react-bootstrap/Stack";
 
 export default function CommentSection({ blogId, comments }) {
-  console.log(comments);
   return (
     <>
       <br />
@@ -17,6 +16,7 @@ export default function CommentSection({ blogId, comments }) {
             return (
               <Comment
                 key={comment.commentId}
+                blogId={blogId}
                 comment={comment}
               />
             );
