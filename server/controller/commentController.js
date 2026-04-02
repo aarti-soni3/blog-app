@@ -17,7 +17,7 @@ module.exports.createComment = async (req, res) => {
         const user = await User.findByPk(decodeUser.userId);
 
         const commentData = {
-            blogId: data.blogId,
+            blogId: data.id,
             userId: user.userId,
             description: data.description,
         }

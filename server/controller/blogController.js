@@ -81,10 +81,14 @@ module.exports.createBlog = async (req, res) => {
 }
 
 module.exports.updateBlog = async (req, res) => {
+
     try {
         const { id } = req.params;
         const data = req.body;
         const file = req.file;
+
+        const blog = await Blog.findByPk(id);
+        if (!blog) return res.status(400).json({ message: "Blog not found!" });
 
         const category = await Category.findOne({ where: { name: data.category } });
         if (!category) return res.status(400).json({ message: "Invalid Category" });
@@ -95,18 +99,15 @@ module.exports.updateBlog = async (req, res) => {
             categoryId: category.categoryId,
         }
 
-        if (data.isDeleteImage)
+        const isDeleteImage = data.isDeleteImage === 'true'
+        if (isDeleteImage)
             updatedData.image = null
 
         if (file)
             updatedData.image = file.path
 
-        const [rowsAffected] = await Blog.update(updatedData, { where: { blogId: id } });
-
-        if (rowsAffected === 0)
-            return res.status(404).json({ message: 'Blog not found or no Changes Made!' });
-
-        return res.status(200).json({ message: 'Blog Updated!' })
+        const updatedBlog = await Blog.update(updatedData, { where: { blogId: id } });
+        return res.status(200).json({ message: 'Blog Updated!', blog: updatedBlog })
 
     } catch (error) {
         console.log(error)

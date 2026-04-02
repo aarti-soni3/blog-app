@@ -8,15 +8,15 @@ const commentApiSlice = apiSlice.injectEndpoints({
         }),
         createComment: builder.mutation({
             query: (body) => ({ url: 'comments/', method: 'POST', body: body }),
-            invalidatesTags: ['Comment']
+            invalidatesTags: (result, error, { id }) => [{ type: 'Blog', id }]
         }),
         updateComment: builder.mutation({
-            query: ({ id, data }) => ({ url: `comments/${id}`, method: 'PATCH', body: data }),
-            invalidatesTags: (result, error, id) => [{ type: 'Comment', id: id }]
+            query: ({ commentId, data }) => ({ url: `comments/${commentId}`, method: 'PATCH', body: data }),
+            invalidatesTags: (result, error, { blogId }) => [{ type: 'Blog', id: blogId }]
         }),
         deleteComment: builder.mutation({
-            query: (id) => ({ url: `comments/${id}`, method: 'DELETE' }),
-            invalidatesTags: ['Comment']
+            query: ({ commentId }) => ({ url: `comments/${commentId}`, method: 'DELETE' }),
+            invalidatesTags: (result, error, { blogId }) => [{ type: 'Blog', id: blogId }]
         }),
     }),
     overrideExisting: false,

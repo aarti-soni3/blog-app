@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import UpdateCommentModal from "./UpdateCommentModal";
 import DeleteCommentModal from "./DeleteCommentModal";
 
-export default function Comment({ comment }) {
+export default function Comment({ blogId, comment }) {
   const { user } = useSelector((state) => state.auth);
 
   const [showUpdateModal, setShowUpdateModal] = useState(false);
@@ -16,7 +16,7 @@ export default function Comment({ comment }) {
     e.stopPropagation();
     setShowUpdateModal(true);
   };
-  
+
   const openDeleteModal = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -66,11 +66,13 @@ export default function Comment({ comment }) {
           }}
         >
           <UpdateCommentModal
+            blogId={blogId}
             comment={comment}
             show={showUpdateModal}
             handleClose={closeUpdateModal}
           />
           <DeleteCommentModal
+            blogId={blogId}
             commentId={comment.commentId}
             show={showDeleteModal}
             handleClose={closeDeleteModal}

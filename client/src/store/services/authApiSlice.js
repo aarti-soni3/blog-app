@@ -9,19 +9,18 @@ const authApiSlice = apiSlice.injectEndpoints({
         }),
         loginUser: builder.mutation({
             query: (body) => ({ url: 'auth/login', method: 'POST', body: body }),
-            invalidatesTags: ['User', 'Auth'] //TODO add
+            invalidatesTags: ['User'] 
         }),
         registerUser: builder.mutation({
             query: (body) => ({ url: 'auth/register', method: 'POST', body: body }),
-            invalidatesTags: ['User', 'Auth'] //TODO add
+            invalidatesTags: ['User']
         }),
         refreshToken: builder.mutation({
             query: (refreshToken) => ({ url: 'auth/refresh', method: 'POST', body: { refreshToken } }),
-            invalidatesTags: ['User', 'Auth'],
+            invalidatesTags: ['User']
         }),
         logoutUser: builder.mutation({
             query: () => ({ url: 'auth/logout', method: "POST" }),
-            invalidatesTags: ['User'],
         })
     }),
     overrideExisting: false,

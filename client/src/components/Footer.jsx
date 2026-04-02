@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <>
       <footer
-        className="footer mt-auto p-3 bg-primary bg-body-tertiary text-light text-center"
+        className="footer mt-auto p-3 bg-dark text-light text-center"
         data-bs-theme="dark"
       >
         <div className="container">

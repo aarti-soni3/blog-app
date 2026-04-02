@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { useLogoutUserMutation } from "../store/services/authApiSlice";
 import { useContext, useState } from "react";
 import { ToastContext } from "../Context Provider/createContext";
@@ -7,6 +7,9 @@ import { logout } from "../store/Slice/authSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import CreateBlogModal from "./Blog/CreateBlogModal";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
 
 export default function NavBar() {
   const { user } = useSelector((state) => state?.auth);
@@ -17,6 +20,7 @@ export default function NavBar() {
   const handleShow = () => setShow(true);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [logoutUser] = useLogoutUserMutation();
   const { showSuccessFeedback } = useContext(ToastContext);
 
@@ -24,14 +28,112 @@ export default function NavBar() {
     const response = await logoutUser().unwrap();
     if (response) {
       dispatch(logout());
-      <Navigate to={"/"} replace />;
+      navigate("/");
       showSuccessFeedback(`You're logged out successfully`);
     }
   };
 
   return (
     <>
-      <nav
+      <Navbar
+        sticky="top"
+        bg="dark"
+        className="p-2 d-flex justify-content-between"
+        data-bs-theme="dark"
+      >
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive
+              ? "nav-link active navbar-brand p-0"
+              : "nav-link navbar-brand p-0"
+          }
+        >
+          <div className="d-flex gap-3 align-items-start p-1">
+            <img src="/logo.png" width={35} height={40} />
+            <h3>Content Corner</h3>
+          </div>
+        </NavLink>
+        <Nav className="ms-auto">
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Profile
+          </NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            About
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Contact
+          </NavLink>
+        </Nav>
+        <Nav className="ms-auto">
+          {!user ? (
+            <>
+              <NavLink
+                to="/login"
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                Login
+              </NavLink>
+              <NavLink
+                to="/register"
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                Register
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink
+                to="/"
+                onClick={handleShow}
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                <FontAwesomeIcon icon={faPenToSquare} /> Write
+              </NavLink>
+
+              <NavLink
+                to="/"
+                onClick={handleLogout}
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                Logout
+              </NavLink>
+            </>
+          )}
+        </Nav>
+      </Navbar>
+      {/* <nav
         className="navbar navbar-expand-lg bg-body-tertiary bg-primary"
         data-bs-theme="dark"
       >
@@ -157,7 +259,7 @@ export default function NavBar() {
             </ul>
           </div>
         </div>
-      </nav>
+      </nav> */}
       <CreateBlogModal handleClose={handleClose} show={show} />
     </>
   );

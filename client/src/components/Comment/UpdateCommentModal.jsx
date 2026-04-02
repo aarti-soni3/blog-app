@@ -8,7 +8,12 @@ import { useForm } from "react-hook-form";
 import { useUpdateCommentMutation } from "../../store/services/commentApiSlice";
 import { useContext } from "react";
 
-export default function UpdateCommentModal({comment, show, handleClose}) {
+export default function UpdateCommentModal({
+  blogId,
+  comment,
+  show,
+  handleClose,
+}) {
   const [updateComment, { isLoading }] = useUpdateCommentMutation();
 
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
@@ -26,7 +31,11 @@ export default function UpdateCommentModal({comment, show, handleClose}) {
 
   const onSubmit = async (data) => {
     try {
-      const response = await updateComment({ id: comment.commentId, data });
+      const response = await updateComment({
+        commentId: comment.commentId,
+        blogId: blogId,
+        data,
+      });
 
       if (response) {
         reset();

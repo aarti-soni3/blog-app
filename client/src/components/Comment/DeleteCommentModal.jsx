@@ -6,6 +6,7 @@ import { useDeleteCommentMutation } from "../../store/services/commentApiSlice";
 import { useContext } from "react";
 
 export default function DeleteCommentModal({
+  blogId,
   commentId,
   show,
   handleClose,
@@ -17,7 +18,7 @@ export default function DeleteCommentModal({
 
   const onSubmit = async () => {
     try {
-      const response = await deleteComment(commentId);
+      const response = await deleteComment({ commentId, blogId });
 
       if (response) {
         showSuccessFeedback("Comment Deleted!");
@@ -26,6 +27,7 @@ export default function DeleteCommentModal({
       console.log(error);
       showErrorFeedback(error.message);
     }
+    handleClose();
   };
 
   return (

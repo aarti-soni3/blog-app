@@ -34,7 +34,7 @@ export default function CreateComment({ blogId }) {
     try {
       const response = await createComment({
         description: data.description,
-        blogId,
+        id: blogId,
       }).unwrap();
       if (response) {
         showSuccessFeedback("Comment Added!");

@@ -30,7 +30,7 @@ export default function BlogCard({ blog }) {
           <h5 className="card-text link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
             {trimSentence(blog.title)}
           </h5>
-          <p className="card-text ">{trimSentence(blog.description, 80)}</p>
+          <p className="card-text ">{trimSentence(blog.description, 70)}</p>
           <PostedBySection
             blog={blog}
             isLoggedinUser={isLoggedinUser}

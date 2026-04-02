@@ -4,7 +4,9 @@ const categoryApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getAllCategory: builder.query({
             query: () => 'category',
-            providesTags: ['Category']
+            providesTags: (result) => result ?
+                [...result.category.map(({ categoryId }) => ({ type: 'Category', id: categoryId }))]
+                : [{ type: 'Category', id: 'LIST' }]
         }),
         getCategory: builder.query({
             query: (id) => `category/${id}`,
@@ -13,7 +15,6 @@ const categoryApiSlice = apiSlice.injectEndpoints({
     }),
     overrideExisting: false,
 })
-
 
 export const { useGetAllCategoryQuery, useGetCategoryQuery } = categoryApiSlice
 export default categoryApiSlice

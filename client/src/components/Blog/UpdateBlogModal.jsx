@@ -18,7 +18,7 @@ export default function UpdateBlogModal({ blog, handleClose, show }) {
 
   const categories = data?.category;
   const getSelectedCategory = () => {
-    console.log(categories, blog);
+    // console.log(categories, blog);
     if (categories)
       return categories.find(
         (category) => category.categoryId === blog?.Category?.categoryId,

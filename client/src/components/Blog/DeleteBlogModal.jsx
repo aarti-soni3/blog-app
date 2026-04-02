@@ -5,9 +5,11 @@ import Form from "react-bootstrap/Form";
 import { useDeleteBlogMutation } from "../../store/services/blogApiSlice";
 import { ToastContext } from "../../Context Provider/createContext";
 import { trimSentence } from "../../utils/TextUtility";
+import { useNavigate } from "react-router";
 
 export default function UpdateBlogModal({ blog, handleClose, show }) {
   const [deleteBlog, { isLoading }] = useDeleteBlogMutation();
+  const navigate = useNavigate();
 
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
 
@@ -24,7 +26,8 @@ export default function UpdateBlogModal({ blog, handleClose, show }) {
       showErrorFeedback(error?.message);
       handleClose();
       console.log(error);
-    } 
+    }
+    navigate("/");
   };
 
   return (
