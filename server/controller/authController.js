@@ -29,7 +29,7 @@ module.exports.register = async (req, res) => {
             address: user.address,
             city: user.city,
             state: user.state,
-            zipCode: user.zip,
+            zip: user.zip,
             userId: newUser.userId,
         }
 
