@@ -18,7 +18,7 @@ export default function DeleteCommentModal({
 
   const onSubmit = async () => {
     try {
-      const response = await deleteComment({ commentId, blogId });
+      const response = await deleteComment({ commentId, blogId }).unwrap();
 
       if (response) {
         showSuccessFeedback("Comment Deleted!");

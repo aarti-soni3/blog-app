@@ -3,3 +3,13 @@ body {
   height: 100%;
   margin: 0;
 }
+
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+.dropdown-menu {
+    max-height: 300px; /* Adjust height as needed */
+    overflow-y: auto;  /* Adds vertical scrollbar only when content exceeds max-height */
+    overflow-x: hidden; /* Prevents unwanted horizontal scrolling */
+}

@@ -58,7 +58,7 @@ export default function Comment({ blogId, comment }) {
           )}
         </div>
         <div className="ms-5 ps-2">
-          <p className="m-0 mb-1">{comment?.description}</p>
+          <p className="m-0 mb-1" style={{ whiteSpace: "pre-wrap" }}>{comment?.description}</p>
         </div>
         <div
           onClick={(e) => {

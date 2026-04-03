@@ -14,7 +14,6 @@ export default function BlogDetails() {
   if (error) return <p>{error.message}</p>;
 
   const blog = data.blog;
-  console.log(blog);
   let isLoggedinUser;
 
   if (user) {
@@ -36,7 +35,7 @@ export default function BlogDetails() {
             <Image
               className="card-img-top w-50 h-100 rounded"
               alt="image"
-              src={blog.image}
+              src={blog?.image?.url}
               loading="lazy"
               thumbnail
             />

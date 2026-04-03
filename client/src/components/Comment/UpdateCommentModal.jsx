@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { commentValidationSchema } from "../../utils/formUtility";
-import FormErrorMessage from "../FormErrorMessage";
+import FormErrorMessage from "../common/FormErrorMessage";
 import { ToastContext } from "../../Context Provider/createContext";
 import { useForm } from "react-hook-form";
 import { useUpdateCommentMutation } from "../../store/services/commentApiSlice";

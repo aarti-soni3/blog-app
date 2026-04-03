@@ -19,9 +19,13 @@ export default function BlogCard({ blog }) {
 
   return (
     <div className="col">
-      <div className="card m-2 shadow-sm h-100" role="button" onClick={handleOnClick}>
+      <div
+        className="card m-2 shadow-sm h-100"
+        role="button"
+        onClick={handleOnClick}
+      >
         <img
-          src={blog?.image}
+          src={blog?.image?.url}
           className="card-img-top"
           alt="image"
           loading="lazy"

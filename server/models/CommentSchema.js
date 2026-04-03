@@ -40,6 +40,8 @@ const Comment = sequelize.define(
 
 Blog.hasMany(Comment, {
     foreignKey: 'blog_id',
+    onDelete: 'cascade',
+    hooks: true,
 });
 
 User.hasMany(Comment, {
@@ -58,14 +60,14 @@ Comment.belongsTo(User, {
     allowNull: false,
 })
 
-const create = async () => {
-    await sequelize.sync({ force: false }).then(() => {
-        console.log('database & table created !');
-    }).catch((err) => {
-        console.log('can not create db & table', err)
-    })
-}
+// const create = async () => {
+//     await sequelize.sync({ force:false }).then(() => {
+//         console.log('database & table created !');
+//     }).catch((err) => {
+//         console.log('can not create db & table', err)
+//     })
+// }
 
-create();
+// create();
 
 module.exports = Comment;

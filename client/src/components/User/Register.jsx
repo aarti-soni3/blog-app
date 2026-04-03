@@ -1,12 +1,12 @@
 import { useForm } from "react-hook-form";
-import { useRegisterUserMutation } from "../store/services/authApiSlice";
 import { useContext } from "react";
-import { ToastContext } from "../Context Provider/createContext";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../store/Slice/authSlice";
-import { userValidationSchema } from "../utils/formUtility";
-import FormErrorMessage from "./FormErrorMessage";
+import { useRegisterUserMutation } from "../../store/services/authApiSlice";
+import { ToastContext } from "../../Context Provider/createContext";
+import { setCredentials } from "../../store/Slice/authSlice";
+import { userValidationSchema } from "../../utils/formUtility";
+import FormErrorMessage from "../common/FormErrorMessage";
 
 export default function Register() {
   const navigate = useNavigate();

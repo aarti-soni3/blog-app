@@ -20,13 +20,12 @@ export default function UpdateBlogModal({ blog, handleClose, show }) {
 
       if (response) {
         showSuccessFeedback("Blog Deleted!");
-        handleClose();
       }
     } catch (error) {
       showErrorFeedback(error?.message);
-      handleClose();
       console.log(error);
     }
+    handleClose();
     navigate("/");
   };
 

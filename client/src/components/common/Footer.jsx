@@ -8,11 +8,12 @@ export default function Footer() {
         data-bs-theme="dark"
       >
         <div className="container">
-          <div className="d-flex gap-2 justify-content-between">
+          <div className="d-flex justify-content-between">
             <div className="w-50">
-              <div className="d-flex gap-3 pb-3 align-items-end">
+              <div className="d-flex gap-3 pb-3 align-items-center">
                 <img src="/logo.png" width={50} height={60} />
-                <h2>Content Corner</h2>
+                <img src="/contentCorner.png" width={210} height={80} />
+                {/* <h2>Content Corner</h2> */}
               </div>
               <p className="text-start">
                 Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -22,8 +23,10 @@ export default function Footer() {
               </p>
             </div>
 
-            <div className="d-flex flex-column m-3">
-              <h6>Pages</h6>
+            <div className="d-flex flex-column justify-content-center">
+              <h6>
+                <b>Links</b>
+              </h6>
 
               <ul className="navbar-nav ms-auto me-auto mb-2 mb-lg-0">
                 <li className="nav-item">
@@ -36,31 +39,6 @@ export default function Footer() {
                     Home
                   </NavLink>
                 </li>
-                <li className="nav-item">
-                  <NavLink
-                    to="/about"
-                    className={({ isActive }) =>
-                      isActive ? "nav-link active" : "nav-link"
-                    }
-                  >
-                    About
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink
-                    to="/contact"
-                    className={({ isActive }) =>
-                      isActive ? "nav-link active" : "nav-link"
-                    }
-                  >
-                    Contact
-                  </NavLink>
-                </li>
-              </ul>
-            </div>
-            <div className="d-flex flex-column m-3">
-              <h6>Pages</h6>
-              <ul className="navbar-nav mb-2 mb-lg-0">
                 <li className="nav-item">
                   <NavLink
                     to="/login"

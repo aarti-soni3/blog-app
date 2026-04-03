@@ -2,12 +2,11 @@ import { toast } from "react-toastify";
 import { ToastContext } from "./createContext";
 
 export default function ToastProvider({ children }) {
-
   //methods for feedback
   const showSuccessFeedback = (
     message,
     position = "bottom-left",
-    theme = "dark",
+    theme = "colored",
   ) => {
     return toast.success(message, { position, theme });
   };
@@ -15,7 +14,7 @@ export default function ToastProvider({ children }) {
   const showErrorFeedback = (
     message,
     position = "bottom-left",
-    theme = "dark",
+    theme = "colored",
   ) => {
     return toast.error(message, { position, theme });
   };
@@ -23,7 +22,7 @@ export default function ToastProvider({ children }) {
   const showInfoFeedback = (
     message,
     position = "bottom-left",
-    theme = "dark",
+    theme = "colored",
   ) => {
     return toast.info(message, { position, theme });
   };

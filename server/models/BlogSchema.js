@@ -5,6 +5,7 @@ const Category = require('./CategorySchema');
 
 const sequelize = getSequelize();
 
+
 const Blog = sequelize.define(
     'Blog',
     {
@@ -23,8 +24,15 @@ const Blog = sequelize.define(
             allowNull: true
         },
         image: {
-            type: DataTypes.STRING,
+            type: DataTypes.JSON,
             allowNull: true,
+            // get() {
+            //     const value = this.getDataValue('image');
+            //     return typeof value === 'string' ? JSON.parse(value) : value;
+            // }
+            // set(value) {
+            //     this.setDataValue('image', typeof value === 'object' ? JSON.stringify(value) : value);
+            // }
         },
         title: {
             type: DataTypes.STRING,
@@ -52,7 +60,7 @@ const Blog = sequelize.define(
                 if (this.image === null || this.image === undefined)
                     return null;
                 else
-                    return this.image.replace('/upload', '/upload/w_200')
+                    return this.image.url.replace('/upload', '/upload/w_200')
             }
         },
     },
@@ -62,6 +70,8 @@ const Blog = sequelize.define(
 )
 
 User.hasMany(Blog, {
+    onDelete: 'cascade',
+    hooks: true,
     foreignKey: 'user_id',
 });
 
@@ -81,14 +91,14 @@ Blog.belongsTo(Category, {
     type: DataTypes.UUID
 })
 
-const create = async () => {
-    await sequelize.sync({ force: false }).then(() => {
-        console.log('database & table created !');
-    }).catch((err) => {
-        console.log('can not create db & table', err)
-    })
-}
+// const create = async () => {
+//     await sequelize.sync({ alter: true }).then(() => {
+//         console.log('database & table created !');
+//     }).catch((err) => {
+//         console.log('can not create db & table', err)
+//     })
+// }
 
-create();
+// create();
 
 module.exports = Blog

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useContext } from "react";
 import { ToastContext } from "../../Context Provider/createContext";
 import { commentValidationSchema } from "../../utils/formUtility";
-import FormErrorMessage from "../FormErrorMessage";
+import FormErrorMessage from "../common/FormErrorMessage";
 import { useCreateCommentMutation } from "../../store/services/commentApiSlice";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 

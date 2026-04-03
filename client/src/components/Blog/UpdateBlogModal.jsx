@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import { useGetAllCategoryQuery } from "../../store/services/categoryApiSlice";
 import { useForm } from "react-hook-form";
 import { blogValidationSchema } from "../../utils/formUtility";
-import FormErrorMessage from "../FormErrorMessage";
+import FormErrorMessage from "../common/FormErrorMessage";
 import { useUpdateBlogMutation } from "../../store/services/blogApiSlice";
 import { ToastContext } from "../../Context Provider/createContext";
 import Image from "react-bootstrap/Image";

@@ -2,6 +2,7 @@ const Blog = require("../models/BlogSchema");
 const Category = require("../models/CategorySchema");
 const Comment = require("../models/CommentSchema");
 const User = require("../models/UserSchema");
+const { cloudinary } = require("../utils/cloudinaryConfig");
 const { getAuthToken, verifyToken } = require("../utils/TokenUtility");
 
 module.exports.getAllBlogs = async (req, res) => {
@@ -64,13 +65,13 @@ module.exports.createBlog = async (req, res) => {
             userId: user.userId,
             description: data.description,
             category_id: category.categoryId,
-            image: file.path
+            image: { name: file?.filename, url: file?.path }
         }
 
         const newBlog = await Blog.create({ ...blog });
 
         if (!newBlog)
-            return res.status(404).json({ message: 'not added' });
+            return res.status(404).json({ message: 'Blog not created!' });
 
         return res.status(200).json({ message: 'Blog created!' })
 
@@ -100,11 +101,15 @@ module.exports.updateBlog = async (req, res) => {
         }
 
         const isDeleteImage = data.isDeleteImage === 'true'
-        if (isDeleteImage)
+        if (isDeleteImage) {
+            await cloudinary.uploader.destroy(blog?.image?.name);
             updatedData.image = null
+        }
 
-        if (file)
-            updatedData.image = file.path
+        if (file) {
+            await cloudinary.uploader.destroy(blog?.image?.name);
+            updatedData.image = { name: file?.filename, url: file.path }
+        }
 
         const updatedBlog = await Blog.update(updatedData, { where: { blogId: id } });
         return res.status(200).json({ message: 'Blog Updated!', blog: updatedBlog })
@@ -119,11 +124,15 @@ module.exports.deleteBlog = async (req, res) => {
 
     const id = req.params.id;
 
-    console.log('id: ', id)
-
     if (id === undefined || id === null)
         return res.status(404).json({ error: { message: 'Invalid Id' } })
 
+    const blog = await Blog.findByPk(id);
+
+    if (!blog)
+        return res.status(404).json({ error: { message: 'Invalid Blog' } })
+
+    await cloudinary.uploader.destroy(blog?.image?.name);
     const rowsAffected = await Blog.destroy({ where: { blogId: id } });
 
     if (rowsAffected === 0)
