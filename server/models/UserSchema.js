@@ -1,6 +1,8 @@
 const { DataTypes } = require('sequelize')
 const { getSequelize } = require('../config/db')
 const { hashedPassword } = require('../utils/hashedPasswordUtility');
+const Address = require('./AddressSchema');
+const { cloudinary } = require('../utils/cloudinaryConfig');
 
 const sequelize = getSequelize()
 
@@ -70,10 +72,6 @@ const User = sequelize.define(
                 }
             }
         },
-        address: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
     }, {
     underscored: true,
     defaultScope: {
@@ -84,8 +82,25 @@ const User = sequelize.define(
     }
 })
 
+User.hasMany(Address, {
+    onDelete: 'cascade',
+    hooks: true,
+    foreignKey: 'user_id',
+});
+
+Address.belongsTo(User, {
+    foreignKey: 'user_id',
+    allowNull: false,
+    type: DataTypes.UUID
+});
+
+
+User.beforeCreate(async (user, options) => {
+    user.password = await hashedPassword(user.password)
+});
+
 // const create = async () => {
-//     await sequelize.sync({ force: false }).then(() => {
+//     await sequelize.sync({ force:false }).then(() => {
 //         console.log('database & table created !');
 //     }).catch((err) => {
 //         console.log('can not create db & table', err)
@@ -94,9 +109,17 @@ const User = sequelize.define(
 
 // create();
 
+// User.beforeDestroy(async (user, options) => {
 
-User.beforeCreate(async (user, options) => {
-    user.password = await hashedPassword(user.password)
-});
+//     const blogs = await Blog.findAll({ where: { userId: user.userId } });
+
+//     if (blogs) {
+//         return blogs.map(async (blog) => {
+//             if (blog.image) {
+//                 await cloudinary.uploader.destroy(blog?.image?.name);
+//             }
+//         })
+//     }
+// });
 
 module.exports = User

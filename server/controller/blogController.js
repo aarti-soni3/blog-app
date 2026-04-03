@@ -125,12 +125,12 @@ module.exports.deleteBlog = async (req, res) => {
     const id = req.params.id;
 
     if (id === undefined || id === null)
-        return res.status(404).json({ error: { message: 'Invalid Id' } })
+        return res.status(404).json({ message: 'Invalid Id' })
 
     const blog = await Blog.findByPk(id);
 
     if (!blog)
-        return res.status(404).json({ error: { message: 'Invalid Blog' } })
+        return res.status(404).json({ message: 'Invalid Blog' })
 
     await cloudinary.uploader.destroy(blog?.image?.name);
     const rowsAffected = await Blog.destroy({ where: { blogId: id } });

@@ -20,7 +20,21 @@ export default function Register() {
     formState: { errors },
     reset,
     getFieldState,
-  } = useForm({ defaultValues: { email: "", password: "" }, mode: "onSubmit" });
+  } = useForm({
+    defaultValues: {
+      name: "",
+      username: "",
+      email: "",
+      gender: "male",
+      password: "",
+      phone: null,
+      address: "",
+      city: "",
+      state: "",
+      zip: null,
+    },
+    mode: "onSubmit",
+  });
 
   const isValid = (fieldName) => {
     const { invalid, isTouched, isDirty } = getFieldState(fieldName);
@@ -30,6 +44,7 @@ export default function Register() {
   const [registerUser, { isLoading }] = useRegisterUserMutation();
 
   const onSubmit = async (data) => {
+    console.log(data);
     try {
       const response = await registerUser(data).unwrap();
 
@@ -47,14 +62,14 @@ export default function Register() {
         navigate("/");
       }
     } catch (error) {
-      showErrorFeedback(error.data.message);
+      showErrorFeedback(error.data.message || error?.message);
       console.log(error.data.message);
     }
   };
 
   return (
     <>
-      <div className="container d-flex col-md-6 flex-column p-5 m-2">
+      <div className="container d-flex col-md-6 flex-column">
         <h2 className="text-center">Register page</h2>
         <div className="card shadow p-3 mb-5 mt-3 rounded">
           <form
@@ -185,6 +200,59 @@ export default function Register() {
                 />
                 <div className="valid-feedback">Looks good!</div>
                 <FormErrorMessage error={errors.address} />
+              </div>
+              <div className="col mb-3">
+                <label htmlFor="city" className="form-label">
+                  City
+                </label>
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  className={`form-control ${errors.city ? "is-invalid" : ""} ${isValid("city") ? "is-valid" : ""}`}
+                  aria-invalid={errors.city ? "true" : "false"}
+                  {...register("city", userValidationSchema.city)}
+                  required
+                />
+                <div className="valid-feedback">Looks good!</div>
+                <FormErrorMessage error={errors.city} />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col mb-3">
+                <label htmlFor="state" className="form-label">
+                  State
+                </label>
+                <input
+                  type="text"
+                  id="state"
+                  name="state"
+                  className={`form-control ${errors.state ? "is-invalid" : ""} ${isValid("state") ? "is-valid" : ""}`}
+                  aria-invalid={errors.city ? "true" : "false"}
+                  {...register("state", userValidationSchema.state)}
+                  required
+                />
+                <div className="valid-feedback">Looks good!</div>
+                <FormErrorMessage error={errors.state} />
+              </div>
+              <div className="col mb-3">
+                <label htmlFor="zip" className="form-label">
+                  Postal Code
+                </label>
+                <input
+                  type="tel"
+                  id="zip"
+                  name="zip"
+                  minLength={6}
+                  maxLength={6}
+                  className={`form-control ${errors.zip ? "is-invalid" : ""} ${isValid("zip") ? "is-valid" : ""}`}
+                  aria-invalid={errors.zip ? "true" : "false"}
+                  {...register("zip", userValidationSchema.zip)}
+                  required
+                />
+                <div className="valid-feedback">Looks good!</div>
+                <FormErrorMessage error={errors.zip} />
               </div>
             </div>
 

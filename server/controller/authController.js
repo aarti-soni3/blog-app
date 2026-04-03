@@ -1,3 +1,4 @@
+const Address = require('../models/AddressSchema');
 const User = require('../models/UserSchema');
 const { verifyHashedPassword } = require('../utils/hashedPasswordUtility');
 const { createToken, verifyToken } = require('../utils/TokenUtility');
@@ -14,11 +15,26 @@ module.exports.register = async (req, res) => {
             phone: user.phone,
             email: user.email,
             password: user.password,
-            address: user.address,
         }
+
+        const existingUser = await User.findOne({ where: { email: user.email } });
+
+        if (existingUser)
+            return res.status(400).json({ message: 'user exist...please use other email-id !' });
 
         const newUser = await User.create({ ...userData });
         console.log('user created : ', newUser.toJSON())
+
+        const addressData = {
+            address: user.address,
+            city: user.city,
+            state: user.state,
+            zipCode: user.zip,
+            userId: newUser.userId,
+        }
+
+        console.log(addressData)
+        const address = await Address.create({ ...addressData })
 
         const userTokenObject = { userId: newUser.userId, email: newUser.email }
         const newAccessToken = createToken(userTokenObject, process.env.ACCESS_TOKEN_KEY, '5m');
@@ -80,7 +96,6 @@ module.exports.authenticateUserOnRefresh = async (req, res) => {
             gender: storedUser.gender,
             email: storedUser.email,
             phone: storedUser.phone,
-            address: storedUser.address,
         }
         res.status(200).json({ user: userData });
     } catch (error) {

@@ -35,6 +35,39 @@ export const userValidationSchema = {
     address: {
         required: "Address is required",
     },
+    city: {
+        maxLength: {
+            value: 50,
+            message: 'Please enter valid city name...it must be less than 50 characters!'
+        },
+        pattern: {
+            value: /^[A-Za-z]+$/i,
+            message: 'Please enter valid city name'
+        },
+        required: 'city is required'
+    },
+    state: {
+        maxLength: {
+            value: 50,
+            message: 'Please enter valid city name...it must be less than 50 characters!'
+        },
+        pattern: {
+            value: /^[A-Za-z]+$/i,
+            message: 'Please enter valid city name'
+        },
+        required: 'state is required'
+    },
+    zip: {
+        length: {
+            ars: [6,6],
+            message: `Postal code length must be 6 digits`,
+        },
+        pattern: {
+            value: /^[0-9]*$/,
+            message: 'Only digit allowed',
+        },
+        required: 'Postal code is required'
+    }
 };
 
 export const blogValidationSchema = {
