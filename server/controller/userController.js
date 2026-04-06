@@ -11,8 +11,8 @@ module.exports.getUser = async (req, res) => {
 
     const address = await Address.findOne({ where: { userId: user.userId }, attributes: { exclude: ['addressId', 'userId', 'createdAt', 'updatedAt', 'user_id'] } });
 
-    if (!address)
-        return res.status(404).json({ message: 'Address not found!' });
+    // if (!address)
+        // return res.status(404).json({ message: 'Address not found!' });
 
     return res.status(200).json({ user, address });
 }

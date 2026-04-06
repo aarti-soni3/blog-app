@@ -31,14 +31,14 @@ export default function UpdateProfileModal({
     getFieldState,
   } = useForm({
     defaultValues: {
-      name: user.name,
-      username: user.username,
-      gender: user.gender,
-      phone: user.phone,
-      address: address.address,
-      city: address.city,
-      state: address.state,
-      zip: address.zip,
+      name: user?.name,
+      username: user?.username,
+      gender: user?.gender,
+      phone: user?.phone,
+      address: address?.address,
+      city: address?.city,
+      state: address?.state,
+      zip: address?.zip,
     },
     mode: "onSubmit",
   });

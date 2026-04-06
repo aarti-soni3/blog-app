@@ -1,25 +1,22 @@
 import { useState } from "react";
-import { useGetAllBlogsQuery } from "../../store/services/blogApiSlice";
 import BlogCard from "./BlogCard";
 import Pagination from "react-bootstrap/Pagination";
 import Form from "react-bootstrap/Form";
 
-export default function Blogs() {
-  const { data, isLoading, error } = useGetAllBlogsQuery();
-
+export default function Blogs({ blogs, isLoading, error }) {
   const [blogsPerPage, setBlogsPerPage] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
 
   const startIndex = (currentPage - 1) * blogsPerPage;
   const endIndex = startIndex + blogsPerPage;
-  const currentBlogs = data?.blogs.slice(startIndex, endIndex);
-  const totalBlogs = data?.blogs?.length;
+  const currentBlogs = blogs?.slice(startIndex, endIndex);
+  const totalBlogs = blogs?.length;
   const totalPages = Math.ceil(totalBlogs / blogsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  if (isLoading) return <h4>Loading...</h4>;
-  if (error) return <h4>Something went wrong!</h4>;
+  if (isLoading) return <h4 className="text-center">Loading...</h4>;
+  if (error) return <h4 className="text-center">Something went wrong!</h4>;
 
   // console.log(
   //   `blogsPerPage:${blogsPerPage} \ncurrentPage:${currentPage} \nstartIndex:${startIndex} \nendIndex:${endIndex} \ntotalBlogs:${totalBlogs} \ntotalPages:${totalPages}`,

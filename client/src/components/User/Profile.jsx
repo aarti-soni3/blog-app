@@ -1,20 +1,21 @@
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import { useGetUserQuery } from "../../store/services/userApiSlice";
-import { useSelector } from "react-redux";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { useGetUserQuery } from "../../store/services/userApiSlice";
+import { useSelector } from "react-redux";
 import { useState } from "react";
 import UpdateProfileModal from "./UpdateProfileModal";
 
 export default function Profile() {
   const { user } = useSelector((state) => state.auth);
-
-  const { data, isLoading } = useGetUserQuery(user.userId, {
-    skip: !user.userId,
+  
+  const { data, isLoading } = useGetUserQuery(user?.userId, {
+    skip: !user?.userId,
   });
-
+  
+  {console.log(user,data?.user,isLoading)}
   const [showEditModal, setShowEditModal] = useState(false);
 
   const openEditModal = (e) => {
@@ -67,8 +68,9 @@ export default function Profile() {
           </div>
         </Card>
       </Container>
+
       <UpdateProfileModal
-        userId={user.userId}
+        userId={user?.userId}
         user={data?.user}
         address={data?.address}
         isUserLoading={isLoading}

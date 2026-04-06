@@ -14,6 +14,7 @@ module.exports.getAllBlogs = async (req, res) => {
                 {
                     model: Comment,
                     attributes: ['commentId', 'description'],
+                    include: [{ model: User, attributes: ['userId'] }],
                 }
             ]
         });

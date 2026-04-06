@@ -1,9 +1,17 @@
 import Blogs from "../Blog/Blogs";
 import Form from "react-bootstrap/Form";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useGetAllBlogsQuery } from "../../store/services/blogApiSlice";
+import { useSelector } from "react-redux";
+import useFilteredBlogs from "../Blog/useFilteredBlogs";
 
 export default function Home() {
+  const { user } = useSelector((state) => state.auth);
+  const { data, isLoading, error } = useGetAllBlogsQuery();
+
+  const { filteredBlogs, filter, setFilter } = useFilteredBlogs({ data, user });
+
   return (
     <>
       <div className="w-100 mx-5">
@@ -12,15 +20,20 @@ export default function Home() {
             <span className="input-group-text">
               <FontAwesomeIcon icon={faFilter} />
             </span>
-            <Form.Select>
-              <option value="1">All Blogs</option>
-              <option value="2">My Blogs</option>
-              <option value="3">Others Blogs</option>
-              <option value="3">Post commented by me</option>
+            <Form.Select
+              value={filter}
+              onChange={(e) => {
+                setFilter(e.target.value);
+              }}
+            >
+              <option value="all">All Blogs</option>
+              <option value="my">My Blogs</option>
+              <option value="other">Others Blogs</option>
+              <option value="commentedByMe">Post commented by me</option>
             </Form.Select>
           </div>
         </div>
-        <Blogs />
+        <Blogs blogs={filteredBlogs} isLoading={isLoading} error={error} />
       </div>
     </>
   );
