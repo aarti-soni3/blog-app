@@ -21,8 +21,8 @@ export default function BlogCard({ blog }) {
     <div className="col">
       <div
         className="card m-2 shadow-sm h-100"
-        role="button"
-        onClick={handleOnClick}
+        // role="button"
+        // onClick={handleOnClick}
       >
         <img
           src={blog?.image?.url}
@@ -31,10 +31,23 @@ export default function BlogCard({ blog }) {
           loading="lazy"
         />
         <div className="card-body">
-          <h5 className="card-text link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
-            {trimSentence(blog.title)}
+          <h5
+            className="card-text link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+            role="button"
+            onClick={handleOnClick}
+          >
+            {trimSentence(blog.title,20)}
           </h5>
-          <p className="card-text ">{trimSentence(blog.description, 70)}</p>
+          <p className="card-text ">
+            {trimSentence(blog.description, 20)}
+            {blog?.Comments?.length ? (
+              <small className="d-block">
+                No. of comments : {blog.Comments.length}
+              </small>
+            ) : (
+              ""
+            )}
+          </p>
           <PostedBySection
             blog={blog}
             isLoggedinUser={isLoggedinUser}

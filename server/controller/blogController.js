@@ -10,7 +10,11 @@ module.exports.getAllBlogs = async (req, res) => {
         const blogs = await Blog.findAll({
             include: [
                 { model: User, attributes: ['username', 'userId'] },
-                { model: Category, attributes: ['categoryId', 'name'] }
+                { model: Category, attributes: ['categoryId', 'name'] },
+                {
+                    model: Comment,
+                    attributes: ['commentId', 'description'],
+                }
             ]
         });
 

@@ -11,10 +11,10 @@ import { useAccessUserQuery } from "./store/services/authApiSlice";
 import { useSelector } from "react-redux";
 import BlogDetails from "./components/Blog/BlogDetails";
 import Footer from "./components/common/Footer";
-import Blogs from "./components/Blog/Blogs";
 import PageNotFound from "./components/common/PageNotFound";
 import Login from "./components/User/Login";
 import Register from "./components/User/Register";
+import Home from "./components/common/Home";
 
 export default function App() {
   const token = useSelector((state) => state.auth.accessToken);
@@ -30,7 +30,7 @@ export default function App() {
           <main className="d-flex justify-content-center mt-5 flex-grow-1">
             <Routes>
               <Route path="/" element={<Navigate to={"/blogs"} replace />} />
-              <Route path="/blogs" element={<Blogs />} />
+              <Route path="/blogs" element={<Home />} />
               <Route path="/blogs/:id" element={<BlogDetails />} />
               <Route element={<GuestRoute />}>
                 <Route path="/login" element={<Login />} />
