@@ -59,7 +59,7 @@ export const userValidationSchema = {
     },
     zip: {
         length: {
-            ars: [6,6],
+            ars: [6, 6],
             message: `Postal code length must be 6 digits`,
         },
         pattern: {
@@ -70,6 +70,8 @@ export const userValidationSchema = {
     }
 };
 
+const fileSize = 5 * 1024 * 1024;
+const allowedTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp']
 export const blogValidationSchema = {
     title: {
         required: "Title is required",
@@ -84,6 +86,10 @@ export const blogValidationSchema = {
     },
     image: {
         required: "Image is required",
+        validate: {
+            lessThan5MB: (files) => files[0].size < fileSize || 'Maximum file size is 5 MB',
+            acceptedFormats: (files) => allowedTypes.includes(files[0]?.type) || 'Only JPG, JPEG, PNG and WEBP formats supported!'
+        }
     },
     description: {
         required: "Description is required",
