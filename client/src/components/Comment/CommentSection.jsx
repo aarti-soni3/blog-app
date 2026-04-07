@@ -5,9 +5,7 @@ import Stack from "react-bootstrap/Stack";
 export default function CommentSection({ user, blogId, comments }) {
   return (
     <>
-      <br />
-      <h3>Comments</h3>
-      <br />
+      {comments.length > 0 ? <h3>Comments</h3> : <></>}
       {user && <CreateComment blogId={blogId} />}
 
       <Stack gap={3}>

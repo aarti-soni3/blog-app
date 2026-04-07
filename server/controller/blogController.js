@@ -78,7 +78,8 @@ module.exports.createBlog = async (req, res) => {
         if (!newBlog)
             return res.status(404).json({ message: 'Blog not created!' });
 
-        return res.status(200).json({ message: 'Blog created!' })
+        console.log('data :::::::::::::::::::::::::::::', newBlog)
+        return res.status(200).json({ blog: newBlog, message: 'Blog created!' })
 
     } catch (error) {
         console.log(error)

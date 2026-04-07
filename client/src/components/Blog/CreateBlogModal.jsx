@@ -8,8 +8,10 @@ import { blogValidationSchema } from "../../utils/formUtility";
 import FormErrorMessage from "../common/FormErrorMessage";
 import { useCreateBlogMutation } from "../../store/services/blogApiSlice";
 import { ToastContext } from "../../Context Provider/createContext";
+import { useNavigate } from "react-router";
 
 export default function CreateBlogModal({ handleClose, show }) {
+  const navigate = useNavigate();
   const { data, isLoading, error } = useGetAllCategoryQuery();
   const [createBlog, { isLoading: isLoadingProcess }] = useCreateBlogMutation();
 
@@ -45,10 +47,13 @@ export default function CreateBlogModal({ handleClose, show }) {
       if (data.image && data.image[0]) formData.append("image", data.image[0]);
       formData.append("category", data.category);
       console.log(formData);
-      
+
       const response = await createBlog(formData).unwrap();
 
-      if (response) {
+      let blog = await response?.blog;
+
+      if (blog) {
+        navigate(`/blogs/${blog.blogId}`);
         showSuccessFeedback("Blog Created!");
         reset();
       }

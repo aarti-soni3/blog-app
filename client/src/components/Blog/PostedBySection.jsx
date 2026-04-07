@@ -56,7 +56,7 @@ export default function PostedBySection({
           {showUserProfile ? (
             <p className="text-body my-auto fs-6">{postedBy()}</p>
           ) : (
-            <small className="text-body-secondary">{postedBy()}</small>
+            <small className="text-body">{postedBy()}</small>
           )}
           {isLoggedinUser && (
             <div className={buttonStyle}>

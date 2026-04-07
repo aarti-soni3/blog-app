@@ -41,14 +41,14 @@ export default function Comment({ blogId, comment }) {
           {isLoggedinUser && (
             <div className="ms-auto">
               <Button
-                variant="outline-primary m-1 my-2"
+                variant="outline-primary"
                 size="sm"
                 onClick={openUpdateModal}
               >
                 Edit
               </Button>
               <Button
-                variant="outline-danger m-1 my-2"
+                variant="outline-danger"
                 size="sm"
                 onClick={openDeleteModal}
               >

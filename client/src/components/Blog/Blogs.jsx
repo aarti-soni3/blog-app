@@ -2,6 +2,7 @@ import { useState } from "react";
 import BlogCard from "./BlogCard";
 import Pagination from "react-bootstrap/Pagination";
 import Form from "react-bootstrap/Form";
+import BlogCardPlaceHolder from "./BlogCardPlaceHolder";
 
 export default function Blogs({ blogs, isLoading, error }) {
   const [blogsPerPage, setBlogsPerPage] = useState(20);
@@ -15,12 +16,20 @@ export default function Blogs({ blogs, isLoading, error }) {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  if (isLoading) return <h4 className="text-center">Loading...</h4>;
-  if (error) return <h4 className="text-center">Something went wrong!</h4>;
+  if (isLoading)
+    return (
+      <>
+        <div className="d-flex flex-column">
+          <div className="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-4 g-4">
+            {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => {
+              return <BlogCardPlaceHolder key={num} />;
+            })}
+          </div>
+        </div>
+      </>
+    );
 
-  // console.log(
-  //   `blogsPerPage:${blogsPerPage} \ncurrentPage:${currentPage} \nstartIndex:${startIndex} \nendIndex:${endIndex} \ntotalBlogs:${totalBlogs} \ntotalPages:${totalPages}`,
-  // );
+  if (error) return <h4 className="text-center">Something went wrong!</h4>;
 
   return (
     <div className="d-flex flex-column">

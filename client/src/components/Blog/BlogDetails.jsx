@@ -5,13 +5,15 @@ import PostedBySection from "./PostedBySection";
 import Image from "react-bootstrap/esm/Image";
 import CommentSection from "../Comment/CommentSection";
 import Badge from "react-bootstrap/Badge";
+import Container from "react-bootstrap/Container";
+import BlogDetailPlaceHolder from "./BlogDetailPlaceHolder";
 
 export default function BlogDetails() {
   const id = useParams("id");
   const { data, isLoading, error } = useGetBlogQuery(id.id);
   const { user } = useSelector((state) => state.auth);
 
-  if (isLoading) return <h4>Loading...</h4>;
+  if (isLoading) return <BlogDetailPlaceHolder />;
   if (error) return <p>{error.message}</p>;
 
   const blog = data.blog;
@@ -23,23 +25,22 @@ export default function BlogDetails() {
 
   return (
     <>
-      <div className="container-md">
+      <Container>
         <div className="m-4">
           <h3 className="card-title">{blog.title}</h3>
-          <div className="d-flex gap-2 align-items-center">
-
-          <PostedBySection
-            blog={blog}
-            isLoggedinUser={isLoggedinUser}
-            showUserProfile={true}
+          <div>
+            <PostedBySection
+              blog={blog}
+              isLoggedinUser={isLoggedinUser}
+              showUserProfile={true}
             />
+          </div>
           <Badge
             pill
-            className="border border-primary bg-transparent text-primary"
-            >
+            className="border border-primary bg-transparent text-primary mb-4 mt-2"
+          >
             {blog?.Category?.name}
           </Badge>
-            </div>
           <br />
           {blog.image && (
             <Image
@@ -62,7 +63,7 @@ export default function BlogDetails() {
           blogId={blog.blogId}
           comments={blog?.Comments}
         />
-      </div>
+      </Container>
     </>
   );
 }
