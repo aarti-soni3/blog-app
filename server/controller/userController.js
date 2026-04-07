@@ -12,7 +12,7 @@ module.exports.getUser = async (req, res) => {
     const address = await Address.findOne({ where: { userId: user.userId }, attributes: { exclude: ['addressId', 'userId', 'createdAt', 'updatedAt', 'user_id'] } });
 
     // if (!address)
-        // return res.status(404).json({ message: 'Address not found!' });
+    // return res.status(404).json({ message: 'Address not found!' });
 
     return res.status(200).json({ user, address });
 }
@@ -49,8 +49,19 @@ module.exports.updateUser = async (req, res) => {
 
 module.exports.deleteUser = async (req, res) => {
 
+    console.log('deletetingggggggggggggggggg')
     const id = req.params.id;
-    console.log(id);
-
-    return res.status(200).json({ message: 'User Deleted!' })
+    
+    console.log('finddddddddddddddddddddddddddd')
+    const user = await User.findByPk(id);
+    
+    console.log('not avaialble userrrrrrrrrrrrrrrrrrrrrrr')
+    if (!user)
+        return res.status(404).json({ message: 'User not found!' });
+    
+    console.log('destroyed userrrrrrrrrrrrrrrrrrrrrrr')
+    await user.destroy();
+    
+    console.log('send resssssssssssssssssssssssssssssss')
+    return res.status(204).json({ message: 'User Deleted!' })
 }

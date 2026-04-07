@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import PostedBySection from "./PostedBySection";
 import Image from "react-bootstrap/esm/Image";
 import CommentSection from "../Comment/CommentSection";
+import Badge from "react-bootstrap/Badge";
 
 export default function BlogDetails() {
   const id = useParams("id");
@@ -25,11 +26,20 @@ export default function BlogDetails() {
       <div className="container-md">
         <div className="m-4">
           <h3 className="card-title">{blog.title}</h3>
+          <div className="d-flex gap-2 align-items-center">
+
           <PostedBySection
             blog={blog}
             isLoggedinUser={isLoggedinUser}
             showUserProfile={true}
-          />
+            />
+          <Badge
+            pill
+            className="border border-primary bg-transparent text-primary"
+            >
+            {blog?.Category?.name}
+          </Badge>
+            </div>
           <br />
           {blog.image && (
             <Image
@@ -47,7 +57,11 @@ export default function BlogDetails() {
           </div>
         </div>
 
-        <CommentSection blogId={blog.blogId} comments={blog?.Comments} />
+        <CommentSection
+          user={user}
+          blogId={blog.blogId}
+          comments={blog?.Comments}
+        />
       </div>
     </>
   );

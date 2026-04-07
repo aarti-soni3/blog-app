@@ -90,7 +90,7 @@ export default function NavBar() {
               </Row>
             </Form>
           </Nav>
-          <Nav className={isExpanded ? "ms-auto" : "ms-2"}>
+          <Nav className={isExpanded ? "ms-auto d-flex align-items-center" : "ms-2"}>
             <NavLink
               to="/"
               className={({ isActive }) =>
@@ -119,59 +119,46 @@ export default function NavBar() {
                 </NavLink>
               </>
             ) : (
-              <div className={isExpanded ? "d-flex gap-2" : ""}>
+              <div className={isExpanded ? "d-flex gap-2 align-items-center" : ""}>
                 <NavLink
-                  to="/"
                   onClick={handleShow}
-                  className={({ isActive }) =>
-                    isActive ? "nav-link active" : "nav-link"
-                  }
+                  className="nav-link"
                 >
                   <FontAwesomeIcon icon={faPenToSquare} /> Write
                 </NavLink>
 
                 {isExpanded ? (
                   <NavDropdown
-                    className="rounded-circle py-0 px-2 m-0 fs-6 bg-light border dropdown-menu-start"
-                    // drop="start"
-                    align="end"
                     title={
-                      <span className="text-black">
+                      <span className="rounded-circle py-1 px-3 m-0 fs-3 bg-light border text-black">
                         {trimSentence(user?.username, 1, false)}
                       </span>
                     }
+                    className="p-0 custom-profile-dropdown"
+                    align="end"
                     id="dropdown"
                   >
-                    <div className="d-flex justify-content-center align-items-center gap-2">
-                      <div className="rounded-circle py-2 px-3 h-50 bg-light fs-5 border text-black">
-                        {trimSentence(user?.name, 1, false)}
-                      </div>
-                      <small>
-                        <h6 className="m-0">{user?.username}</h6>
-                        <NavLink
-                          to="/profile"
-                          className={({ isActive }) =>
-                            isActive
-                              ? "nav-link active text-info p-0"
-                              : "nav-link text-info p-0"
-                          }
-                        >
-                          View profile
-                        </NavLink>
-                      </small>
+                    <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                      <NavDropdown.Item
+                        onClick={() => navigate("/profile")}
+                        className="d-flex gap-2"
+                      >
+                        <div className="rounded-circle py-1 px-3 w-50 h-50 bg-light fs-3 border text-center text-black">
+                          {trimSentence(user?.name, 1, false)}
+                        </div>
+                        <small>
+                          <h6 className="m-0">{user?.username}</h6>
+                          <p className="nav-link text-info p-0">View profile</p>
+                        </small>
+                      </NavDropdown.Item>
+
+                      <NavDropdown.Item
+                        onClick={handleLogout}
+                        className="nav-link text-danger"
+                      >
+                        Logout
+                      </NavDropdown.Item>
                     </div>
-                    <NavDropdown.Divider />
-                    <NavLink
-                      to="/"
-                      onClick={handleLogout}
-                      className={({ isActive }) =>
-                        isActive
-                          ? "nav-link active text-danger"
-                          : "nav-link text-danger"
-                      }
-                    >
-                      Logout
-                    </NavLink>
                   </NavDropdown>
                 ) : (
                   <NavLink

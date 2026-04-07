@@ -2,7 +2,6 @@ const { DataTypes } = require('sequelize')
 const { getSequelize } = require('../config/db')
 const { hashedPassword } = require('../utils/hashedPasswordUtility');
 const Address = require('./AddressSchema');
-const { cloudinary } = require('../utils/cloudinaryConfig');
 
 const sequelize = getSequelize()
 
@@ -108,18 +107,5 @@ User.beforeCreate(async (user, options) => {
 // }
 
 // create();
-
-// User.beforeDestroy(async (user, options) => {
-
-//     const blogs = await Blog.findAll({ where: { userId: user.userId } });
-
-//     if (blogs) {
-//         return blogs.map(async (blog) => {
-//             if (blog.image) {
-//                 await cloudinary.uploader.destroy(blog?.image?.name);
-//             }
-//         })
-//     }
-// });
 
 module.exports = User

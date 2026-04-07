@@ -2,9 +2,9 @@ const { DataTypes } = require('sequelize')
 const { getSequelize } = require('../config/db')
 const User = require('./UserSchema');
 const Category = require('./CategorySchema');
+const { cloudinary } = require('../utils/cloudinaryConfig');
 
 const sequelize = getSequelize();
-
 
 const Blog = sequelize.define(
     'Blog',
@@ -26,13 +26,6 @@ const Blog = sequelize.define(
         image: {
             type: DataTypes.JSON,
             allowNull: true,
-            // get() {
-            //     const value = this.getDataValue('image');
-            //     return typeof value === 'string' ? JSON.parse(value) : value;
-            // }
-            // set(value) {
-            //     this.setDataValue('image', typeof value === 'object' ? JSON.stringify(value) : value);
-            // }
         },
         title: {
             type: DataTypes.STRING,
@@ -90,6 +83,19 @@ Blog.belongsTo(Category, {
     allowNull: true,
     type: DataTypes.UUID
 })
+
+User.beforeDestroy(async (user, options) => {
+
+    const blogs = await Blog.findAll({ where: { userId: user.userId } });
+
+    if (blogs) {
+        return blogs.map(async (blog) => {
+            if (blog.image) {
+                await cloudinary.uploader.destroy(blog?.image?.name);
+            }
+        })
+    }
+});
 
 // const create = async () => {
 //     await sequelize.sync({ alter: true }).then(() => {

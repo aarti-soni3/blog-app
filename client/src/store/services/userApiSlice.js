@@ -10,9 +10,13 @@ const userApiSlice = apiSlice.injectEndpoints({
             query: (body) => ({ url: `users/${body.id}`, method: 'PATCH', body: body.data }),
             invalidatesTags: (result, error, args) => [{ type: 'User', id: args.id }]
         }),
+        deleteUser: builder.mutation({
+            query: (userId) => ({ url: `users/${userId}`, method: 'DELETE' }),
+            invalidatesTags: (result, error, args) => [{ type: 'User', id: args.userId }]
+        }),
     }),
     overrideExisting: false
 })
 
-export const { useGetUserQuery, useUpdateUserMutation } = userApiSlice
+export const { useGetUserQuery, useUpdateUserMutation, useDeleteUserMutation } = userApiSlice
 export default userApiSlice

@@ -7,16 +7,20 @@ import { useGetUserQuery } from "../../store/services/userApiSlice";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import UpdateProfileModal from "./UpdateProfileModal";
+import DeleteUserModal from "./DeleteUserModal";
 
 export default function Profile() {
   const { user } = useSelector((state) => state.auth);
-  
+
   const { data, isLoading } = useGetUserQuery(user?.userId, {
     skip: !user?.userId,
   });
-  
-  {console.log(user,data?.user,isLoading)}
+
+  {
+    console.log(user, data?.user, isLoading);
+  }
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const openEditModal = (e) => {
     e.preventDefault();
@@ -28,16 +32,37 @@ export default function Profile() {
     setShowEditModal(false);
   };
 
+  const openDeleteModal = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+  };
+
   if (isLoading) return <h4>Loading...</h4>;
 
   return (
     <>
       <Container>
         <Card className="p-3">
-          <Card.Header className="d-flex justify-content-between mb-4">
+          <Card.Header className="d-flex justify-content-between align-items-center mb-4">
             <h3>Your profile</h3>
-            <Button variant="primary" onClick={openEditModal}>
+            <Button
+              className="ms-auto"
+              variant="primary"
+              onClick={openEditModal}
+            >
               Edit
+            </Button>
+            <Button
+              variant="outline-danger"
+              className="ms-2"
+              onClick={openDeleteModal}
+            >
+              Delete My Account
             </Button>
           </Card.Header>
           <div className="d-flex flex-column align-items-center">
@@ -76,6 +101,12 @@ export default function Profile() {
         isUserLoading={isLoading}
         show={showEditModal}
         handleClose={closeEditModal}
+      />
+
+      <DeleteUserModal
+        userId={user?.userId}
+        show={showDeleteModal}
+        handleClose={closeDeleteModal}
       />
     </>
   );

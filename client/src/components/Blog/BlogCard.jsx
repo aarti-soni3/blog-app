@@ -2,6 +2,9 @@ import { useSelector } from "react-redux";
 import { trimSentence } from "../../utils/TextUtility";
 import { useNavigate } from "react-router";
 import PostedBySection from "./PostedBySection";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Badge from "react-bootstrap/Badge";
 
 export default function BlogCard({ blog }) {
   const navigate = useNavigate();
@@ -17,28 +20,25 @@ export default function BlogCard({ blog }) {
     isLoggedinUser = user.userId === blog?.User?.userId;
   }
 
+  console.log(blog);
+
   return (
-    <div className="col">
-      <div
-        className="card m-2 shadow-sm h-100"
-        // role="button"
-        // onClick={handleOnClick}
+    <Col>
+      <Card
+        className="m-2 shadow-sm h-100" /* role="button" onClick={handleOnClick} */
       >
-        <img
+        <Card.Img
+          variant="top"
           src={blog?.image?.url}
-          className="card-img-top"
+          className="h-50"
           alt="image"
           loading="lazy"
         />
-        <div className="card-body">
-          <h5
-            className="card-text link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-            role="button"
-            onClick={handleOnClick}
-          >
-            {trimSentence(blog.title,20)}
-          </h5>
-          <p className="card-text ">
+        <Card.Body className="pb-1">
+          <Card.Title role="button" onClick={handleOnClick}>
+            {trimSentence(blog.title, 20)}
+          </Card.Title>
+          <Card.Text>
             {trimSentence(blog.description, 20)}
             {blog?.Comments?.length ? (
               <small className="d-block">
@@ -47,14 +47,22 @@ export default function BlogCard({ blog }) {
             ) : (
               ""
             )}
-          </p>
+            <div>
+              <Badge
+                pill
+                className="border border-primary bg-transparent text-primary"
+              >
+                {blog?.Category?.name}
+              </Badge>
+            </div>
+          </Card.Text>
           <PostedBySection
             blog={blog}
             isLoggedinUser={isLoggedinUser}
             showUserProfile={false}
           />
-        </div>
-      </div>
-    </div>
+        </Card.Body>
+      </Card>
+    </Col>
   );
 }

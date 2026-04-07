@@ -15,24 +15,26 @@ export default function Home() {
   return (
     <>
       <div className="w-100 mx-5">
-        <div className="d-flex justify-content-end">
-          <div className="input-group mb-2 w-auto">
-            <span className="input-group-text">
-              <FontAwesomeIcon icon={faFilter} />
-            </span>
-            <Form.Select
-              value={filter}
-              onChange={(e) => {
-                setFilter(e.target.value);
-              }}
-            >
-              <option value="all">All Blogs</option>
-              <option value="my">My Blogs</option>
-              <option value="other">Others Blogs</option>
-              <option value="commentedByMe">Post commented by me</option>
-            </Form.Select>
+        {user && (
+          <div className="d-flex justify-content-end">
+            <div className="input-group mb-2 w-auto">
+              <span className="input-group-text">
+                <FontAwesomeIcon icon={faFilter} />
+              </span>
+              <Form.Select
+                value={filter}
+                onChange={(e) => {
+                  setFilter(e.target.value);
+                }}
+              >
+                <option value="all">All Blogs</option>
+                <option value="my">My Blogs</option>
+                <option value="other">Others Blogs</option>
+                <option value="commentedByMe">Post commented by me</option>
+              </Form.Select>
+            </div>
           </div>
-        </div>
+        )}
         <Blogs blogs={filteredBlogs} isLoading={isLoading} error={error} />
       </div>
     </>
