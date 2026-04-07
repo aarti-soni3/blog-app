@@ -108,7 +108,7 @@ module.exports.updateBlog = async (req, res) => {
         const isDeleteImage = data.isDeleteImage === 'true'
         if (isDeleteImage) {
             await cloudinary.uploader.destroy(blog?.image?.name);
-            updatedData.image = null
+            updatedData.image = { name: "", url: "" }
         }
 
         if (file) {

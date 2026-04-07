@@ -33,11 +33,14 @@ export default function Blogs({ blogs, isLoading, error }) {
 
   return (
     <div className="d-flex flex-column">
-      <div className="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-4 g-4">
-        {currentBlogs &&
+      <div className="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-4 g-4 ">
+        {currentBlogs && currentBlogs.length > 0 ? (
           currentBlogs.map((blog) => {
             return <BlogCard key={blog.blogId} blog={blog} />;
-          })}
+          })
+        ) : (
+          <h4 className="text-center">No blogs available!</h4>
+        )}
       </div>
 
       <section className="ms-auto d-flex gap-3 align-items-end">
