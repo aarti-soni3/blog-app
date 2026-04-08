@@ -82,22 +82,23 @@ module.exports.logout = async (req, res) => {
 module.exports.authenticateUserOnRefresh = async (req, res) => {
 
     try {
-        const token = getAuthToken(req)
+        // const token = getAuthToken(req)
 
-        if (!token) {
-            return res.status(401).json({ message: 'Invalid Token' })
-        }
+        // if (!token)
+        // return res.status(401).json({ message: 'Invalid Token' })
 
-        const user = verifyToken(token, process.env.ACCESS_TOKEN_KEY)
-        const storedUser = await User.findOne({ where: { userId: user.userId } })
+        // const user = verifyToken(token, process.env.ACCESS_TOKEN_KEY)
+        // const storedUser = await User.findOne({ where: { userId: user.userId } })
+
+        const user = req.user;
 
         const userData = {
-            userId: storedUser.userId,
-            username: storedUser.username,
-            name: storedUser.name,
-            gender: storedUser.gender,
-            email: storedUser.email,
-            phone: storedUser.phone,
+            userId: user.userId,
+            username: user.username,
+            name: user.name,
+            gender: user.gender,
+            email: user.email,
+            phone: user.phone,
         }
         res.status(200).json({ user: userData });
     } catch (error) {

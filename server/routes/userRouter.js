@@ -4,8 +4,8 @@ const { isLoggedIn, isAccountOwner } = require('../middlewares');
 const router = express.Router();
 
 router.route('/:id')
-    .get(userController.getUser)
-    .patch(isLoggedIn,isAccountOwner, userController.updateUser)
-    .delete(isLoggedIn,isAccountOwner, userController.deleteUser);
+    .get(isLoggedIn, userController.getUser)
+    .patch(isLoggedIn, isAccountOwner, userController.updateUser)
+    .delete(isLoggedIn, isAccountOwner, userController.deleteUser);
 
 module.exports = router;
