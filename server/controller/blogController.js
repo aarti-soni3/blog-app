@@ -3,7 +3,6 @@ const Category = require("../models/CategorySchema");
 const Comment = require("../models/CommentSchema");
 const User = require("../models/UserSchema");
 const { cloudinary } = require("../utils/cloudinaryConfig");
-const { getAuthToken, verifyToken } = require("../utils/TokenUtility");
 
 module.exports.getAllBlogs = async (req, res) => {
     try {
@@ -59,24 +58,26 @@ module.exports.createBlog = async (req, res) => {
     try {
         const data = req.body;
         const file = req.file;
+        const categoryId = req.categoryId;
+        const user = req.user;
+        // const token = getAuthToken(req);
+        // const decodeUser = verifyToken(token, process.env.ACCESS_TOKEN_KEY);
 
-        const token = getAuthToken(req);
-        const decodeUser = verifyToken(token, process.env.ACCESS_TOKEN_KEY);
-        const user = await User.findByPk(decodeUser.userId);
-        const category = await Category.findOne({ where: { name: data.category } });
+        // const user = await User.findByPk(req.user.userId);
+        // const category = await Category.findOne({ where: { name: data.category } });
 
         const blog = {
             title: data.title,
             userId: user.userId,
             description: data.description,
-            category_id: category.categoryId,
+            categoryId: categoryId,
             image: { name: file?.filename, url: file?.path }
         }
 
         const newBlog = await Blog.create({ ...blog });
 
-        if (!newBlog)
-            return res.status(404).json({ message: 'Blog not created!' });
+        // if (!newBlog)
+        // return res.status(404).json({ message: 'Blog not created!' });
 
         return res.status(200).json({ blog: newBlog, message: 'Blog created!' })
 
@@ -87,22 +88,23 @@ module.exports.createBlog = async (req, res) => {
 }
 
 module.exports.updateBlog = async (req, res) => {
-
     try {
         const { id } = req.params;
         const data = req.body;
         const file = req.file;
+        const categoryId = req.categoryId;
+        const blog = req.blog;
 
-        const blog = await Blog.findByPk(id);
-        if (!blog) return res.status(400).json({ message: "Blog not found!" });
+        // const blog = await Blog.findByPk(id);
+        // if (!blog) return res.status(400).json({ message: "Blog not found!" });
 
-        const category = await Category.findOne({ where: { name: data.category } });
-        if (!category) return res.status(400).json({ message: "Invalid Category" });
+        // const category = await Category.findOne({ where: { name: data.category } });
+        // if (!category) return res.status(400).json({ message: "Invalid Category" });
 
         const updatedData = {
             title: data.title,
             description: data.description,
-            categoryId: category.categoryId,
+            categoryId: categoryId,
         }
 
         const isDeleteImage = data.isDeleteImage === 'true'
@@ -128,20 +130,26 @@ module.exports.updateBlog = async (req, res) => {
 module.exports.deleteBlog = async (req, res) => {
 
     const id = req.params.id;
+    const blog = req.blog;
 
-    if (id === undefined || id === null)
-        return res.status(404).json({ message: 'Invalid Id' })
+    try {
+        // if (id === undefined || id === null)
+        // return res.status(404).json({ message: 'Invalid Id' })
 
-    const blog = await Blog.findByPk(id);
+        // const blog = await Blog.findByPk(id);
 
-    if (!blog)
-        return res.status(404).json({ message: 'Invalid Blog' })
+        // if (!blog)
+        // return res.status(404).json({ message: 'Invalid Blog' })
+        if (blog?.image?.name)
+            await cloudinary.uploader.destroy(blog?.image?.name);
+        const rowsAffected = await Blog.destroy({ where: { blogId: id } });
 
-    await cloudinary.uploader.destroy(blog?.image?.name);
-    const rowsAffected = await Blog.destroy({ where: { blogId: id } });
+        if (rowsAffected === 0)
+            return res.status(404).json({ message: 'Unable to delete blog' });
 
-    if (rowsAffected === 0)
-        return res.status(404).json({ message: 'Unable to delete blog' });
+        return res.status(200).json({ message: 'Blog Deleted!' });
 
-    return res.status(200).json({ message: 'Blog Deleted!' });
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
 }

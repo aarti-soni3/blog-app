@@ -50,10 +50,10 @@ const Blog = sequelize.define(
         thumbnail: {
             type: DataTypes.VIRTUAL,
             get() {
-                if (this.image === null || this.image === undefined)
+                if (!this.image && !this.image?.url)
                     return null;
                 else
-                    return this.image.url.replace('/upload', '/upload/w_200')
+                    return this.image?.url?.replace('/upload', '/upload/w_200')
             }
         },
     },

@@ -1,7 +1,7 @@
 const Address = require('../models/AddressSchema');
 const User = require('../models/UserSchema');
 const { verifyHashedPassword } = require('../utils/hashedPasswordUtility');
-const { createToken, verifyToken } = require('../utils/TokenUtility');
+const { createToken, verifyToken, getAuthToken } = require('../utils/TokenUtility');
 module.exports.register = async (req, res) => {
     const user = req.body;
     try {
@@ -33,7 +33,6 @@ module.exports.register = async (req, res) => {
             userId: newUser.userId,
         }
 
-        console.log(addressData)
         const address = await Address.create({ ...addressData })
 
         const userTokenObject = { userId: newUser.userId, email: newUser.email }
@@ -51,26 +50,29 @@ module.exports.register = async (req, res) => {
 module.exports.login = async (req, res) => {
 
     const user = req.body;
+    try {
+        if (!user.email || !user.password)
+            return res.status(400).json({ message: 'Invalid Data' })
 
-    if (!user.email || !user.password)
-        return res.status(400).json({ message: 'Bad Request' })
+        const loggedinUser = await User.scope('withPassword').findOne({ where: { email: user.email } });
 
-    const loggedinUser = await User.scope('withPassword').findOne({ where: { email: user.email } });
+        if (!loggedinUser)
+            return res.status(401).json({ message: 'Email or Password is invalid' })
 
-    if (!loggedinUser)
+        const isMatched = await verifyHashedPassword(user.password, loggedinUser.password)
+
+        if (isMatched) {
+            const userData = { userId: loggedinUser.userId, email: loggedinUser.email }
+            const newAccessToken = createToken(userData, process.env.ACCESS_TOKEN_KEY, '5m');
+            const newRefreshToken = createToken(userData, process.env.REFRESH_TOKEN_KEY, '1h');
+
+            return res.status(200).json({ message: 'Logged in Successfully!', user: loggedinUser, accessToken: newAccessToken, refreshToken: newRefreshToken })
+        }
         return res.status(401).json({ message: 'Email or Password is invalid' })
 
-    const isMatched = await verifyHashedPassword(user.password, loggedinUser.password)
-
-    if (isMatched) {
-        const userData = { userId: loggedinUser.userId, email: loggedinUser.email }
-        const newAccessToken = createToken(userData, process.env.ACCESS_TOKEN_KEY, '5m');
-        const newRefreshToken = createToken(userData, process.env.REFRESH_TOKEN_KEY, '1h');
-
-        return res.status(200).json({ message: 'Logged in Successfully!', user: loggedinUser, accessToken: newAccessToken, refreshToken: newRefreshToken })
+    } catch (error) {
+        return res.status(500).json(error)
     }
-
-    res.status(401).json({ message: 'Email or Password is invalid' })
 }
 
 module.exports.logout = async (req, res) => {
@@ -78,14 +80,14 @@ module.exports.logout = async (req, res) => {
 }
 
 module.exports.authenticateUserOnRefresh = async (req, res) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-
-    if (!token) {
-        return res.status(401).json({ message: 'Invalid Token' })
-    }
 
     try {
+        const token = getAuthToken(req)
+
+        if (!token) {
+            return res.status(401).json({ message: 'Invalid Token' })
+        }
+
         const user = verifyToken(token, process.env.ACCESS_TOKEN_KEY)
         const storedUser = await User.findOne({ where: { userId: user.userId } })
 
@@ -105,7 +107,7 @@ module.exports.authenticateUserOnRefresh = async (req, res) => {
 
 module.exports.refresh = async (req, res) => {
 
-    const refreshToken = req.body.refreshToken;
+    const refreshToken = req.body?.refreshToken;
     try {
 
         if (!refreshToken)

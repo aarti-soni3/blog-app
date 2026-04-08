@@ -35,7 +35,14 @@ export default function Home() {
             </div>
           </div>
         )}
-        <Blogs blogs={filteredBlogs} isLoading={isLoading} error={error} />
+
+        {/* set filter as key for refresh when changes*/}
+        <Blogs
+          key={filter}
+          blogs={filteredBlogs}
+          isLoading={isLoading}
+          error={error}
+        />
       </div>
     </>
   );

@@ -2,66 +2,64 @@ const Address = require("../models/AddressSchema");
 const User = require("../models/UserSchema");
 
 module.exports.getUser = async (req, res) => {
-    const id = req.params.id;
 
-    const user = await User.findByPk(id, { attributes: { exclude: ['createdAt', 'updatedAt'] } });
+    const { id } = req.params;
+    try {
 
-    if (!user)
-        return res.status(404).json({ message: 'User not found!' });
+        const user = await User.findByPk(id, { attributes: { exclude: ['createdAt', 'updatedAt'] } });
 
-    const address = await Address.findOne({ where: { userId: user.userId }, attributes: { exclude: ['addressId', 'userId', 'createdAt', 'updatedAt', 'user_id'] } });
+        if (!user)
+            return res.status(404).json({ message: 'User not found!' });
 
-    // if (!address)
-    // return res.status(404).json({ message: 'Address not found!' });
+        const address = await Address.findOne({ where: { userId: user.userId }, attributes: { exclude: ['addressId', 'userId', 'createdAt', 'updatedAt', 'user_id'] } });
 
-    return res.status(200).json({ user, address });
+        // if (!address)
+        // return res.status(404).json({ message: 'Address not found!' });
+
+        return res.status(200).json({ user, address });
+    } catch (error) {
+        return res.status(500).json({ error })
+    }
 }
 
 module.exports.updateUser = async (req, res) => {
     const id = req.params.id;
     const data = req.body;
 
-    const user = await User.findByPk(id);
-    const address = await Address.findOne({ where: { userId: id } });
+    try {
+        const userData = {
+            name: data?.name,
+            username: data?.username,
+            gender: data?.gender,
+            phone: data?.phone
+        }
 
-    if (!user /*|| !address*/)
-        return res.status(404).json({ message: /*!user ?*/ 'User not found!'/* : 'Address not found!'*/ })
+        const addressData = {
+            address: data?.address,
+            city: data?.city,
+            state: data?.state,
+            zip: data?.zip,
+        }
 
-    const userData = {
-        name: data.name,
-        username: data.username,
-        gender: data.gender,
-        phone: data.phone
+        const updatedUser = await User.update(userData, { where: { userId: id } });
+        const updatedAddress = await Address.update(addressData, { where: { userId: id } })
+        return res.status(200).json({ user: updatedUser, address: updatedAddress });
+    } catch (error) {
+        return res.status(500).json({ error });
     }
-
-    const addressData = {
-        address: data.address,
-        city: data.city,
-        state: data.state,
-        zip: data.zip,
-    }
-
-    const updatedUser = await User.update(userData, { where: { userId: id } });
-    const updatedAddress = await Address.update(addressData, { where: { userId: id } })
-    return res.status(200).json({ user: updatedUser, address: updatedAddress });
-
 }
 
 module.exports.deleteUser = async (req, res) => {
 
-    console.log('deletetingggggggggggggggggg')
-    const id = req.params.id;
-    
-    console.log('finddddddddddddddddddddddddddd')
-    const user = await User.findByPk(id);
-    
-    console.log('not avaialble userrrrrrrrrrrrrrrrrrrrrrr')
-    if (!user)
-        return res.status(404).json({ message: 'User not found!' });
-    
-    console.log('destroyed userrrrrrrrrrrrrrrrrrrrrrr')
-    await user.destroy();
-    
-    console.log('send resssssssssssssssssssssssssssssss')
-    return res.status(204).json({ message: 'User Deleted!' })
+    // const id = req.params.id;
+    // const user = await User.findByPk(id);
+
+    // if (!user)
+    // return res.status(404).json({ message: 'User not found!' });
+    try {
+        await req.user.destroy();
+        return res.status(204).json({ message: 'User Deleted!' })
+    } catch (error) {
+        return res.status(500).json({ error })
+    }
 }

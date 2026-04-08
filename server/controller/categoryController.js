@@ -15,7 +15,6 @@ module.exports.getAllCategory = async (req, res) => {
 
 module.exports.getCategory = async (req, res) => {
     const id = req.params.id;
-    console.log(id)
 
     try {
         const category = await Category.findByPk(id);
@@ -23,6 +22,7 @@ module.exports.getCategory = async (req, res) => {
         if (!category)
             return res.status(404).json({ message: 'no category found!' });
 
+        return res.status(200).json({ category })
     } catch (error) {
         return res.status(500).json({ message: error.message })
     }

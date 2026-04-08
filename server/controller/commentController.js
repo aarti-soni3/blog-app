@@ -25,7 +25,7 @@ module.exports.createComment = async (req, res) => {
         const comment = await Comment.create({ ...commentData });
         console.log(comment, commentData)
 
-        return res.status(200).json({ message: 'comment created!' })
+        return res.status(200).json({ comment, message: 'comment created!' })
     } catch (error) {
         console.log(error)
         return res.status(500).json({ message: error.message });
@@ -56,7 +56,6 @@ module.exports.updateComment = async (req, res) => {
             return res.status(404).json({ error: { message: 'User not found' } });
 
         const comment = await Comment.update({ description: data.description }, { where: { commentId: id } });
-        console.log(comment)
 
         return res.status(200).json({ message: 'comment Updated!' })
     } catch (error) {
@@ -66,16 +65,18 @@ module.exports.updateComment = async (req, res) => {
 }
 
 module.exports.deleteComment = async (req, res) => {
+    const { id } = req.params;
 
-    const id = req.params.id;
+    try {
+        if (id === undefined || id === null)
+            return res.status(404).json({ error: { message: 'Invalid Id' } })
 
-    if (id === undefined || id === null)
-        return res.status(404).json({ error: { message: 'Invalid Id' } })
+        const rowsAffected = await Comment.destroy({ where: { commentId: id } });
+        if (rowsAffected === 0)
+            return res.status(404).json({ message: 'Unable to delete Comment' });
 
-    const rowsAffected = await Comment.destroy({ where: { commentId: id } });
-
-    if (rowsAffected === 0)
-        return res.status(404).json({ message: 'Unable to delete Comment' });
-
-    return res.status(200).json({ message: 'Comment Deleted!' });
+        return res.status(200).json({ message: 'Comment Deleted!' });
+    } catch (error) {
+        return res.status(500).json({ error })
+    }
 }

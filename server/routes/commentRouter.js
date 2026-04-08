@@ -1,13 +1,14 @@
 const express = require('express');
 const commentController = require('../controller/commentController');
+const { validate } = require('../utils/validationUtility');
+const { createCommentSchema, updateCommentSchema } = require('../validations/commentSchema');
+const { isLoggedIn, isCommentAuthor } = require('../middlewares');
 const router = express.Router();
 
-router.route('/').post(commentController.createComment);
+router.route('/').post(isLoggedIn, validate(createCommentSchema), commentController.createComment);
 
 router.route('/:id')
-    .patch(commentController.updateComment)
-    .delete(commentController.deleteComment);
-
-
+    .patch(isLoggedIn, isCommentAuthor, validate(updateCommentSchema), commentController.updateComment)
+    .delete(isLoggedIn, isCommentAuthor, commentController.deleteComment);
 
 module.exports = router

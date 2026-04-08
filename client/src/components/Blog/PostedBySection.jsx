@@ -61,14 +61,16 @@ export default function PostedBySection({
           {isLoggedinUser && (
             <div className={buttonStyle}>
               <Button
-                variant="outline-primary m-1 my-2"
+                variant="outline-primary"
+                className="ms-2"
                 size="sm"
                 onClick={openUpdateModal}
               >
                 Edit
               </Button>
               <Button
-                variant="outline-danger m-1 my-2"
+                variant="outline-danger"
+                className="ms-2"
                 size="sm"
                 onClick={openDeleteModal}
               >

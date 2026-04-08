@@ -1,10 +1,11 @@
 const express = require('express');
 const userController = require('../controller/userController');
+const { isLoggedIn, isAccountOwner } = require('../middlewares');
 const router = express.Router();
 
 router.route('/:id')
     .get(userController.getUser)
-    .patch(userController.updateUser)
-    .delete(userController.deleteUser);
+    .patch(isLoggedIn,isAccountOwner, userController.updateUser)
+    .delete(isLoggedIn,isAccountOwner, userController.deleteUser);
 
 module.exports = router;

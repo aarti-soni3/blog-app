@@ -42,13 +42,15 @@ export default function Comment({ blogId, comment }) {
             <div className="ms-auto">
               <Button
                 variant="outline-primary"
+                className="ms-2"
                 size="sm"
                 onClick={openUpdateModal}
-              >
+                >
                 Edit
               </Button>
               <Button
                 variant="outline-danger"
+                className="ms-2"
                 size="sm"
                 onClick={openDeleteModal}
               >

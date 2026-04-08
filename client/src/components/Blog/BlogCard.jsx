@@ -30,7 +30,7 @@ export default function BlogCard({ blog }) {
     <Col>
       <Card
         className="m-2 shadow-sm h-100" /* role="button" onClick={handleOnClick} */
-        style={{ maxHeight: "400px" }}
+        style={{ maxHeight: "420px" }}
       >
         {isBroken ? (
           <Placeholder xs={12} style={{ height: "200px" }} />
