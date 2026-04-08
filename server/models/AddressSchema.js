@@ -64,14 +64,4 @@ const Address = sequelize.define(
     }
 )
 
-// const create = async () => {
-//     await sequelize.sync({ alter:true }).then(() => {
-//         console.log('database & table created !');
-//     }).catch((err) => {
-//         console.log('can not create db & table', err)
-//     })
-// }
-
-// create();
-
 module.exports = Address

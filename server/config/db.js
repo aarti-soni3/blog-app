@@ -23,4 +23,14 @@ const connectMySQLDatabase = async () => {
     }
 }
 
+// const create = async () => {
+//     await sequelize.sync({ force:false }).then(() => {
+//         console.log('database & table created !');
+//     }).catch((err) => {
+//         console.log('can not create db & table', err)
+//     })
+// }
+
+// create();
+
 module.exports = { connectMySQLDatabase, getSequelize };

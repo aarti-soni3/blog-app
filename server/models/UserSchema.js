@@ -98,14 +98,4 @@ User.beforeCreate(async (user, options) => {
     user.password = await hashedPassword(user.password)
 });
 
-// const create = async () => {
-//     await sequelize.sync({ force:false }).then(() => {
-//         console.log('database & table created !');
-//     }).catch((err) => {
-//         console.log('can not create db & table', err)
-//     })
-// }
-
-// create();
-
 module.exports = User

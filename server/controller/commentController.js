@@ -23,11 +23,8 @@ module.exports.createComment = async (req, res) => {
         }
 
         const comment = await Comment.create({ ...commentData });
-        console.log(comment, commentData)
-
         return res.status(200).json({ comment, message: 'comment created!' })
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: error.message });
     }
 }
@@ -59,7 +56,6 @@ module.exports.updateComment = async (req, res) => {
 
         return res.status(200).json({ message: 'comment Updated!' })
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: error.message });
     }
 }

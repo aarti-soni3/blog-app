@@ -60,11 +60,6 @@ module.exports.createBlog = async (req, res) => {
         const file = req.file;
         const categoryId = req.categoryId;
         const user = req.user;
-        // const token = getAuthToken(req);
-        // const decodeUser = verifyToken(token, process.env.ACCESS_TOKEN_KEY);
-
-        // const user = await User.findByPk(req.user.userId);
-        // const category = await Category.findOne({ where: { name: data.category } });
 
         const blog = {
             title: data.title,
@@ -75,14 +70,9 @@ module.exports.createBlog = async (req, res) => {
         }
 
         const newBlog = await Blog.create({ ...blog });
-
-        // if (!newBlog)
-        // return res.status(404).json({ message: 'Blog not created!' });
-
         return res.status(200).json({ blog: newBlog, message: 'Blog created!' })
 
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: error.message });
     }
 }
@@ -94,12 +84,6 @@ module.exports.updateBlog = async (req, res) => {
         const file = req.file;
         const categoryId = req.categoryId;
         const blog = req.blog;
-
-        // const blog = await Blog.findByPk(id);
-        // if (!blog) return res.status(400).json({ message: "Blog not found!" });
-
-        // const category = await Category.findOne({ where: { name: data.category } });
-        // if (!category) return res.status(400).json({ message: "Invalid Category" });
 
         const updatedData = {
             title: data.title,
@@ -122,7 +106,6 @@ module.exports.updateBlog = async (req, res) => {
         return res.status(200).json({ message: 'Blog Updated!', blog: updatedBlog })
 
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: error.message });
     }
 }
@@ -133,13 +116,6 @@ module.exports.deleteBlog = async (req, res) => {
     const blog = req.blog;
 
     try {
-        // if (id === undefined || id === null)
-        // return res.status(404).json({ message: 'Invalid Id' })
-
-        // const blog = await Blog.findByPk(id);
-
-        // if (!blog)
-        // return res.status(404).json({ message: 'Invalid Blog' })
         if (blog?.image?.name)
             await cloudinary.uploader.destroy(blog?.image?.name);
         const rowsAffected = await Blog.destroy({ where: { blogId: id } });

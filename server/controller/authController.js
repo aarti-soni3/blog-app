@@ -1,7 +1,7 @@
 const Address = require('../models/AddressSchema');
 const User = require('../models/UserSchema');
 const { verifyHashedPassword } = require('../utils/hashedPasswordUtility');
-const { createToken, verifyToken, getAuthToken } = require('../utils/TokenUtility');
+const { createToken, verifyToken } = require('../utils/TokenUtility');
 module.exports.register = async (req, res) => {
     const user = req.body;
     try {
@@ -42,7 +42,6 @@ module.exports.register = async (req, res) => {
         return res.status(201).json({ message: 'User Registered Successfully!', user: newUser, accessToken: newAccessToken, refreshToken: newRefreshToken })
 
     } catch (error) {
-        console.log(error.message)
         return res.status(500).json({ message: error.message })
     }
 }
@@ -82,14 +81,6 @@ module.exports.logout = async (req, res) => {
 module.exports.authenticateUserOnRefresh = async (req, res) => {
 
     try {
-        // const token = getAuthToken(req)
-
-        // if (!token)
-        // return res.status(401).json({ message: 'Invalid Token' })
-
-        // const user = verifyToken(token, process.env.ACCESS_TOKEN_KEY)
-        // const storedUser = await User.findOne({ where: { userId: user.userId } })
-
         const user = req.user;
 
         const userData = {

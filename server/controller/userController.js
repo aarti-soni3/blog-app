@@ -9,9 +9,6 @@ module.exports.getUser = async (req, res) => {
         const user = await User.findByPk(id, { attributes: { exclude: ['createdAt', 'updatedAt'] } });
         const address = await Address.findOne({ where: { userId: user.userId }, attributes: { exclude: ['addressId', 'userId', 'createdAt', 'updatedAt', 'user_id'] } });
 
-        // if (!user)
-        //     return res.status(404).json({ message: 'User not found!' });
-
         return res.status(200).json({ user, address });
     } catch (error) {
         return res.status(500).json({ error })
@@ -46,12 +43,6 @@ module.exports.updateUser = async (req, res) => {
 }
 
 module.exports.deleteUser = async (req, res) => {
-
-    // const id = req.params.id;
-    // const user = await User.findByPk(id);
-
-    // if (!user)
-    // return res.status(404).json({ message: 'User not found!' });
     try {
         await req.user.destroy();
         return res.status(204).json({ message: 'User Deleted!' })

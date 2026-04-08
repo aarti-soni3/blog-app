@@ -22,14 +22,4 @@ const Category = sequelize.define(
     }
 )
 
-// const create = async () => {
-//     await sequelize.sync({ force: false }).then(() => {
-//         console.log('database & table created !');
-//     }).catch((err) => {
-//         console.log('can not create db & table', err)
-//     })
-// }
-
-// create();
-
 module.exports = Category;
