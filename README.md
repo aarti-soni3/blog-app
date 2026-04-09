@@ -225,12 +225,6 @@ npm run dev
 
 ---
 
-## 📸 Screenshots
-
-> _Add screenshots here after deployment_
-
----
-
 ## 📄 License
 
 This project is open-source and available under the [MIT License](LICENSE).
