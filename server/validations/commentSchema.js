@@ -1,3 +1,5 @@
+//schema specifications for express validator
+
 module.exports.createCommentSchema = {
     id: {
         notEmpty: { errorMessage: 'blog id must be required' }

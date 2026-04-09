@@ -1,10 +1,10 @@
-import Badge from "react-bootstrap/Badge";
 import Container from "react-bootstrap/Container";
 import Placeholder from "react-bootstrap/Placeholder";
 import Card from "react-bootstrap/Card";
 import Image from "react-bootstrap/Image";
 import CommentPlaceHolder from "../Comment/CommentPlaceHolder";
 
+// show placeholder when blog details page is loading
 export default function BlogDetailPlaceHolder() {
   return (
     <>

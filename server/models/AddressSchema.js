@@ -60,6 +60,7 @@ const Address = sequelize.define(
         }
     },
     {
+        //allow user_id as userId in front n backend
         underscored: true,
     }
 )

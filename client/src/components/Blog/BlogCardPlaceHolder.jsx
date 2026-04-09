@@ -2,6 +2,7 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Placeholder from "react-bootstrap/Placeholder";
 
+//show place holder when blolg card is loading
 export default function BlogCardPlaceHolder() {
   return (
     <Col>

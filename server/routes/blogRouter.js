@@ -8,6 +8,10 @@ const { createBlogSchema, updateBlogSchema } = require('../validations/blogSchem
 const { isLoggedIn, isBlogAuthor } = require('../middlewares/index.js');
 const upload = multer({ storage: storage });
 
+//middleware isLoggedin for protected path can access only if user is avilable
+//middleware validate first check data is matching all validation then allow to next
+//middleware isBlogauthor : only allow owner of blog for changes
+
 router.route('/')
     .get(blogController.getAllBlogs)
     .post(isLoggedIn, upload.single('image'), validate(createBlogSchema), blogController.createBlog)

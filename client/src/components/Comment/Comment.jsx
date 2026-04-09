@@ -38,6 +38,7 @@ export default function Comment({ blogId, comment }) {
           </p>
           <b className="text-body my-auto fs-6">{comment?.User?.username}</b>
 
+          {/* show only if user is logged in  */}
           {isLoggedinUser && (
             <div className="ms-auto">
               <Button
@@ -45,7 +46,7 @@ export default function Comment({ blogId, comment }) {
                 className="ms-2"
                 size="sm"
                 onClick={openUpdateModal}
-                >
+              >
                 Edit
               </Button>
               <Button
@@ -60,7 +61,9 @@ export default function Comment({ blogId, comment }) {
           )}
         </div>
         <div className="ms-5 ps-2">
-          <p className="m-0 mb-1" style={{ whiteSpace: "pre-wrap" }}>{comment?.description}</p>
+          <p className="m-0 mb-1" style={{ whiteSpace: "pre-wrap" }}>
+            {comment?.description}
+          </p>
         </div>
         <div
           onClick={(e) => {

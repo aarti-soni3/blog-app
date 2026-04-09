@@ -6,6 +6,7 @@ const { cloudinary } = require("../utils/cloudinaryConfig");
 
 module.exports.getAllBlogs = async (req, res) => {
     try {
+        //find all blogs n send to client with populate user, category,comment data
         const blogs = await Blog.findAll({
             include: [
                 { model: User, attributes: ['username', 'userId'] },
@@ -31,6 +32,7 @@ module.exports.getAllBlogs = async (req, res) => {
 module.exports.getBlog = async (req, res) => {
     const id = req.params.id;
 
+    //get single blog details with user, category n comment data
     try {
         const blog = await Blog.findByPk(id, {
             include: [
@@ -91,12 +93,14 @@ module.exports.updateBlog = async (req, res) => {
             categoryId: categoryId,
         }
 
+        //check delete image or not
         const isDeleteImage = data.isDeleteImage === 'true'
         if (isDeleteImage) {
             await cloudinary.uploader.destroy(blog?.image?.name);
             updatedData.image = { name: "", url: "" }
         }
 
+        //if file exist delete image n upload new
         if (file) {
             await cloudinary.uploader.destroy(blog?.image?.name);
             updatedData.image = { name: file?.filename, url: file.path }
@@ -116,6 +120,7 @@ module.exports.deleteBlog = async (req, res) => {
     const blog = req.blog;
 
     try {
+        //delete blog image first then delete blog
         if (blog?.image?.name)
             await cloudinary.uploader.destroy(blog?.image?.name);
         const rowsAffected = await Blog.destroy({ where: { blogId: id } });

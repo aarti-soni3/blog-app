@@ -13,7 +13,6 @@ export default function Footer() {
               <div className="d-flex gap-3 pb-3 align-items-center">
                 <img src="/logo.png" width={50} height={60} />
                 <img src="/contentCorner.png" width={210} height={80} />
-                {/* <h2>Content Corner</h2> */}
               </div>
               <p className="text-start">
                 Lorem Ipsum is simply dummy text of the printing and typesetting

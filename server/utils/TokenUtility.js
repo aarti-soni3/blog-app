@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 
+// utility functiions for jwt
+
 module.exports.createToken = (user, key, expiresIn) => {
     return jwt.sign(user, key, { expiresIn })
 }

@@ -10,8 +10,8 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: 'blog-app',
-        allowedFormats: ['png', 'jpg', 'jpeg']
+        folder: 'blog-app', // folder name inside images are uploaded
+        allowedFormats: ['png', 'jpg', 'jpeg', 'webp']
     }
 })
 

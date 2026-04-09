@@ -1,5 +1,7 @@
 const Category = require('../models/CategorySchema')
 
+//seed category data
+
 const categories = [
     { "name": "Technology" },
     { "name": "Travel Guides" },

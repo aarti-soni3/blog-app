@@ -11,6 +11,8 @@ import { useState } from "react";
 export default function BlogCard({ blog }) {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
+
+  //display placeholder if image not exist
   const [isBroken, setIsBroken] = useState(false);
 
   const handleOnClick = () => {

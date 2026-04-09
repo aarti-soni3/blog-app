@@ -11,9 +11,14 @@ import { ToastContext } from "../../Context Provider/createContext";
 import Image from "react-bootstrap/Image";
 
 export default function UpdateBlogModal({ blog, handleClose, show }) {
+  
+  // get all category to display list
   const { data, isLoading, error } = useGetAllCategoryQuery();
+
+  //update mutation called
   const [updateBlog, { isLoading: isLoadingProcess }] = useUpdateBlogMutation();
 
+  //show feedback
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
 
   const categories = data?.category;
@@ -26,6 +31,7 @@ export default function UpdateBlogModal({ blog, handleClose, show }) {
     else return null;
   };
 
+  // react form hook for handling data
   const {
     register,
     getFieldState,
@@ -42,6 +48,7 @@ export default function UpdateBlogModal({ blog, handleClose, show }) {
     mode: "onSubmit",
   });
 
+  // for data validation style
   const isValid = (fieldName) => {
     const { invalid, isTouched, isDirty } = getFieldState(fieldName);
     return !invalid && (isTouched || isDirty);
@@ -49,6 +56,7 @@ export default function UpdateBlogModal({ blog, handleClose, show }) {
 
   const onSubmit = async (data) => {
     try {
+      // form data for send image to backend
       const formData = new FormData();
       formData.append("title", data.title);
       formData.append("description", data.description);
@@ -68,7 +76,6 @@ export default function UpdateBlogModal({ blog, handleClose, show }) {
       }
     } catch (error) {
       showErrorFeedback(error?.message);
-      console.log(error);
     }
     handleClose();
   };

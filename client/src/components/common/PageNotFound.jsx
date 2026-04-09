@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 export default function PageNotFound() {
   const navigate = useNavigate();
 
+  //display page when diffrent route define on url
   return (
     <div className="container d-flex flex-column align-items-center">
       <Image

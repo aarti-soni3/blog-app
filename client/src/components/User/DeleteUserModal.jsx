@@ -11,7 +11,11 @@ import { useNavigate } from "react-router";
 export default function DeleteUserModal({ userId, show, handleClose }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  //delete user mutation
   const [deleteUser, { isLoading }] = useDeleteUserMutation();
+  
+  //show feedback
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
 
   const onSubmit = async () => {
@@ -24,7 +28,6 @@ export default function DeleteUserModal({ userId, show, handleClose }) {
         showSuccessFeedback("User Deleted!");
       }
     } catch (error) {
-      console.log(error);
       showErrorFeedback(error.message);
     }
     handleClose();

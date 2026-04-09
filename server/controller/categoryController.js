@@ -16,6 +16,7 @@ module.exports.getAllCategory = async (req, res) => {
 module.exports.getCategory = async (req, res) => {
     const id = req.params.id;
 
+    //get single category detail
     try {
         const category = await Category.findByPk(id);
 

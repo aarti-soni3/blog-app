@@ -44,7 +44,6 @@ export default function Register() {
   const [registerUser, { isLoading }] = useRegisterUserMutation();
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       const response = await registerUser(data).unwrap();
 

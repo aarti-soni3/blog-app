@@ -9,16 +9,18 @@ module.exports.register = async (req, res) => {
             return res.status(404).json({ message: 'Invalid data' })
 
         const userData = {
-            name: user.name,
-            username: user.username,
-            gender: user.gender,
-            phone: user.phone,
-            email: user.email,
-            password: user.password,
+            name: user?.name,
+            username: user?.username,
+            gender: user?.gender,
+            phone: user?.phone,
+            email: user?.email,
+            password: user?.password,
         }
 
+        // find user
         const existingUser = await User.findOne({ where: { email: user.email } });
 
+        //if exist return res 
         if (existingUser)
             return res.status(400).json({ message: 'user exist...please use other email-id !' });
 
@@ -35,6 +37,7 @@ module.exports.register = async (req, res) => {
 
         const address = await Address.create({ ...addressData })
 
+        //create token object,accesstoken & refresh token
         const userTokenObject = { userId: newUser.userId, email: newUser.email }
         const newAccessToken = createToken(userTokenObject, process.env.ACCESS_TOKEN_KEY, '5m');
         const newRefreshToken = createToken(userTokenObject, process.env.REFRESH_TOKEN_KEY, '1h');
@@ -53,13 +56,17 @@ module.exports.login = async (req, res) => {
         if (!user.email || !user.password)
             return res.status(400).json({ message: 'Invalid Data' })
 
+        //find user
         const loggedinUser = await User.scope('withPassword').findOne({ where: { email: user.email } });
 
+        // if not exist return res
         if (!loggedinUser)
             return res.status(401).json({ message: 'Email or Password is invalid' })
 
+        //if user exist verify password
         const isMatched = await verifyHashedPassword(user.password, loggedinUser.password)
 
+        //if valid password generate token
         if (isMatched) {
             const userData = { userId: loggedinUser.userId, email: loggedinUser.email }
             const newAccessToken = createToken(userData, process.env.ACCESS_TOKEN_KEY, '5m');
@@ -80,6 +87,7 @@ module.exports.logout = async (req, res) => {
 
 module.exports.authenticateUserOnRefresh = async (req, res) => {
 
+    //verify token n send user data
     try {
         const user = req.user;
 
@@ -102,16 +110,21 @@ module.exports.refresh = async (req, res) => {
     const refreshToken = req.body?.refreshToken;
     try {
 
+        //if no token then return
         if (!refreshToken)
             return res.status(403).json({ message: 'Invalid Creadentials' });
 
+        //verify token 
         let user = await verifyToken(refreshToken, process.env.REFRESH_TOKEN_KEY)
 
+        // find decoded user 
         user = await User.findOne({ where: { userId: user.userId } })
 
+        // if not user return res
         if (!user)
             return res.status(403).json({ message: 'Invalid Creadentials' });
 
+        //create data and send to client
         const userData = { userId: user.userId, email: user.email }
         const newAccessToken = createToken(userData, process.env.ACCESS_TOKEN_KEY, '5m');
         const newRefreshToken = createToken(userData, process.env.REFRESH_TOKEN_KEY, '1h');

@@ -1,5 +1,7 @@
 const Comment = require('../models/CommentSchema')
 
+//seed comment data
+
 const commentData = [
     {
         "userId": "f0f16540-f0d9-4953-a8f0-69f5ec5e1302",
@@ -51,8 +53,7 @@ const commentData = [
         "blogId": "47d09b83-3ef5-434d-be6c-30f42f528cad",
         "description": "Thanks for giving us something thoughtful to consider today.",
     },
-]
-    ;
+];
 
 const createData = async () => {
     try {

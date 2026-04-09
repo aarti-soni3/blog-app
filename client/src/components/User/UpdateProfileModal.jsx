@@ -20,6 +20,8 @@ export default function UpdateProfileModal({
   handleClose,
 }) {
   const navigate = useNavigate();
+
+  //show feedback
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
 
   //react hook form for managing state and validations
@@ -43,6 +45,7 @@ export default function UpdateProfileModal({
     mode: "onSubmit",
   });
 
+  //style based on valid invalid state
   const isValid = (fieldName) => {
     const { invalid, isTouched, isDirty } = getFieldState(fieldName);
     return !invalid && (isTouched || isDirty);

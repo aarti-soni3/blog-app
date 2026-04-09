@@ -1,3 +1,4 @@
+// user schema validation specifications
 export const userValidationSchema = {
     name: {
         minLength: 2,
@@ -70,6 +71,7 @@ export const userValidationSchema = {
     }
 };
 
+// blog schema validation specifications
 const fileSize = 5 * 1024 * 1024;
 const allowedTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp']
 export const blogValidationSchema = {
@@ -100,6 +102,7 @@ export const blogValidationSchema = {
     },
 };
 
+// comment schema validation specifications
 export const commentValidationSchema = {
     description: {
         required: "Write anything to post comment!",

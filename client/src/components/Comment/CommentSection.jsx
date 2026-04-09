@@ -2,6 +2,7 @@ import Comment from "./Comment";
 import CreateComment from "./CreateComment";
 import Stack from "react-bootstrap/Stack";
 
+//main comment section
 export default function CommentSection({ user, blogId, comments }) {
   return (
     <>

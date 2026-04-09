@@ -8,9 +8,12 @@ import { trimSentence } from "../../utils/TextUtility";
 import { useNavigate } from "react-router";
 
 export default function UpdateBlogModal({ blog, handleClose, show }) {
+
+  //use mutation for delete blog
   const [deleteBlog, { isLoading }] = useDeleteBlogMutation();
   const navigate = useNavigate();
 
+  //show feedback
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
 
   const onSubmit = async (e) => {
@@ -23,7 +26,6 @@ export default function UpdateBlogModal({ blog, handleClose, show }) {
       }
     } catch (error) {
       showErrorFeedback(error?.message);
-      console.log(error);
     }
     handleClose();
     navigate("/");

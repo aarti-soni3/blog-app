@@ -1,6 +1,8 @@
 
 const { checkSchema, validationResult } = require('express-validator');
 
+// validate function for checking schema validation
+
 module.exports.validate = (schema) => {
 
     return [checkSchema(schema), (req, res, next) => {

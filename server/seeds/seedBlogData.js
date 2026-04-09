@@ -1,5 +1,7 @@
 const Blog = require('../models/BlogSchema')
 
+//seed blog data
+
 const blogData = [
     {
         "userId": "f0f16540-f0d9-4953-a8f0-69f5ec5e1302",
@@ -162,8 +164,7 @@ const blogData = [
         "categoryId": "b6c5470e-2efa-4d9c-ad1d-a5285fc10f2d",
         "image": { "url": "https://res.cloudinary.com/ddvcxup9j/image/upload/v1775196252/blog-app/nnpx42fyfaxa5yddlysy.jpg", "name": "blog-app/nnpx42fyfaxa5yddlysy" },
     }
-]
-    ;
+];
 
 const createData = async () => {
     try {

@@ -1,11 +1,13 @@
 const User = require('../models/UserSchema')
 
+//seed user data
+
 const userData = [
     {
         name: 'art',
         username: 'art',
         gender: 'female',
-        phone: 9409937378,
+        phone: 9409937472,
         email: 'art@gmail.com',
         password: 'art@1234',
         address: 'vsdvndssvo',
@@ -17,7 +19,7 @@ const userData = [
         name: 'rt',
         username: 'rt',
         gender: 'female',
-        phone: 9408837378,
+        phone: 9408839338,
         email: 'rt@gmail.com',
         password: 'rt@12345',
         address: 'dvcspdnvsod vsdvndssvo',
@@ -29,7 +31,7 @@ const userData = [
         name: 'aarti',
         username: 'aarti',
         gender: 'female',
-        phone: 9009937378,
+        phone: 9009933388,
         email: 'aarti@gmail.com',
         password: 'aarti@123',
         address: 'sdfonhsdos dvcspdnvsod vsdvndssvo',
@@ -37,8 +39,7 @@ const userData = [
         state: "gujrat",
         zip: 111111,
     },
-]
-    ;
+];
 
 const createData = async () => {
     try {

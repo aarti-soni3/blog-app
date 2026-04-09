@@ -14,10 +14,14 @@ export default function UpdateCommentModal({
   show,
   handleClose,
 }) {
+
+  //update comment mutation
   const [updateComment, { isLoading }] = useUpdateCommentMutation();
 
+  //show feedback
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
 
+  // react form hook to handle form data
   const {
     reset,
     register,
@@ -42,12 +46,12 @@ export default function UpdateCommentModal({
         showSuccessFeedback("Comment Updated!");
       }
     } catch (error) {
-      console.log(error);
       showErrorFeedback(error.message);
     }
     handleClose();
   };
 
+  //change style based on valid invalid state
   const isValid = (fieldName) => {
     const { invalid, isTouched, isDirty } = getFieldState(fieldName);
     return !invalid && (isTouched || isDirty);

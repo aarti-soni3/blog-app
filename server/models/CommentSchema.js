@@ -38,12 +38,14 @@ const Comment = sequelize.define(
     }
 )
 
+//delete comments if blog is deleted
 Blog.hasMany(Comment, {
     foreignKey: 'blog_id',
     onDelete: 'cascade',
     hooks: true,
 });
 
+//delete comments of user if user is deleted
 User.hasMany(Comment, {
     foreignKey: 'user_id',
     onDelete: 'cascade',

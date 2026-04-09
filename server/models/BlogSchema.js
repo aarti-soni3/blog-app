@@ -62,6 +62,7 @@ const Blog = sequelize.define(
     }
 )
 
+//delete all blog if user is delete
 User.hasMany(Blog, {
     onDelete: 'cascade',
     hooks: true,
@@ -86,6 +87,7 @@ Blog.belongsTo(Category, {
 
 User.beforeDestroy(async (user, options) => {
 
+    //if user is deleting...first delete all blogs image from storage
     const blogs = await Blog.findAll({ where: { userId: user.userId } });
 
     if (blogs) {

@@ -10,10 +10,14 @@ import { findWordFromSentence } from "../../utils/TextUtility";
 
 export default function Home({ searchText }) {
   const { user } = useSelector((state) => state.auth);
+
+  // getting all blogs
   const { data, isLoading, error } = useGetAllBlogsQuery();
 
+  //filter blogs by filter state
   const { filteredBlogs, filter, setFilter } = useFilteredBlogs({ data, user });
 
+  // search filtered blogs
   const foundBlogs = useMemo(() => {
     if (!searchText) return filteredBlogs;
 

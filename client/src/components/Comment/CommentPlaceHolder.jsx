@@ -3,6 +3,7 @@ import Placeholder from "react-bootstrap/Placeholder";
 import Card from "react-bootstrap/Card";
 import Image from "react-bootstrap/Image";
 
+//comment placeholder to display when loading
 export default function CommentPlaceHolder() {
   const buttonStyle = {
     width: "80px",

@@ -13,8 +13,6 @@ export default function PostedBySection({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const closeUpdateModal = () => {
-    // e.preventDefault();
-    // e.stopPropagation();
     setShowUpdateModal(false);
   };
   const openUpdateModal = (e) => {
@@ -24,8 +22,6 @@ export default function PostedBySection({
   };
 
   const closeDeleteModal = () => {
-    // e.preventDefault();
-    // e.stopPropagation();
     setShowDeleteModal(false);
   };
   const openDeleteModal = (e) => {
@@ -46,6 +42,7 @@ export default function PostedBySection({
   return (
     <>
       <div className={mainContainer}>
+        {/* show round shape profile view */}
         {showUserProfile && (
           <div className="rounded-circle py-1 px-3 m-1 bg-secondary fs-5 border">
             {trimSentence(blog?.User?.username, 1, false)}

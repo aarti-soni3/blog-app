@@ -12,11 +12,17 @@ import { useNavigate } from "react-router";
 
 export default function CreateBlogModal({ handleClose, show }) {
   const navigate = useNavigate();
+
+  //get category to display list
   const { data, isLoading, error } = useGetAllCategoryQuery();
+
+  //get create blog post mutation
   const [createBlog, { isLoading: isLoadingProcess }] = useCreateBlogMutation();
 
+  //show feedback
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
 
+  //react form hook to handle form data
   const {
     register,
     reset,
@@ -33,20 +39,20 @@ export default function CreateBlogModal({ handleClose, show }) {
     mode: "onSubmit",
   });
 
+  // for validating filed data
   const isValid = (fieldName) => {
     const { invalid, isTouched, isDirty } = getFieldState(fieldName);
     return !invalid && (isTouched || isDirty);
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
+      // used form data for sending image file to backend
       const formData = new FormData();
       formData.append("title", data.title);
       formData.append("description", data.description);
       if (data.image && data.image[0]) formData.append("image", data.image[0]);
       formData.append("category", data.category);
-      console.log(formData);
 
       const response = await createBlog(formData).unwrap();
 
@@ -59,7 +65,6 @@ export default function CreateBlogModal({ handleClose, show }) {
       }
     } catch (error) {
       showErrorFeedback(error?.message);
-      console.log(error);
     } finally {
       handleClose();
     }

@@ -1,3 +1,5 @@
+//schema specifications for express validator
+
 module.exports.registerSchema = {
     name: {
         notEmpty: { errorMessage: 'Name is required' }

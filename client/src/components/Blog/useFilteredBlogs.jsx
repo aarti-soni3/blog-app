@@ -3,10 +3,10 @@ import { useMemo } from "react";
 import { useState } from "react";
 
 export default function useFilteredBlogs({ data, user }) {
+  //filter state
   const [filter, setFilter] = useState("all");
 
-  // const blogs = useMemo(() => data?.blogs || [], [data]);
-
+  //functions for all filter state
   const getAllBlogs = useCallback(() => {
     return data?.blogs;
   }, [data]);
@@ -35,6 +35,7 @@ export default function useFilteredBlogs({ data, user }) {
     }, []);
   }, [data, user]);
 
+  //returning blogs based on state used memo hook for caching
   const filteredBlogs = useMemo(() => {
     switch (filter) {
       case "my":

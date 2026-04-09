@@ -29,6 +29,7 @@ export default function ToastProvider({ children }) {
 
   return (
     <ToastContext.Provider
+      //shared value across components
       value={{ showSuccessFeedback, showErrorFeedback, showInfoFeedback }}
     >
       {children}

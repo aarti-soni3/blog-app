@@ -7,15 +7,16 @@ module.exports.createComment = async (req, res) => {
     const data = req.body;
 
     try {
-        let token = req.headers['authorization'];
+        // let token = req.headers['authorization'];
 
-        if (!token)
-            return res.status(401).json({ message: 'Invaliad Token' });
+        // if (!token)
+        // return res.status(401).json({ message: 'Invaliad Token' });
 
-        token = token.split(" ")[1];
-        const decodeUser = verifyToken(token, process.env.ACCESS_TOKEN_KEY);
-        const user = await User.findByPk(decodeUser.userId);
+        // token = token.split(" ")[1];
+        // const decodeUser = verifyToken(token, process.env.ACCESS_TOKEN_KEY);
+        // const user = await User.findByPk(decodeUser.userId);
 
+        const user = req.user;
         const commentData = {
             blogId: data.id,
             userId: user.userId,
@@ -35,24 +36,26 @@ module.exports.updateComment = async (req, res) => {
     const data = req.body;
 
     try {
-        const existingComment = await Comment.findByPk(id);
+        // const existingComment = await Comment.findByPk(id);
 
-        if (!existingComment)
-            return res.status(404).json({ error: { message: 'Comment not found!' } })
+        // if (!existingComment)
+        // return res.status(404).json({ error: { message: 'Comment not found!' } })
 
-        let token = req.headers['authorization'];
+        // let token = req.headers['authorization'];
 
-        if (!token)
-            return res.status(401).json({ message: 'Invaliad Token' });
+        // if (!token)
+        // return res.status(401).json({ message: 'Invaliad Token' });
 
-        token = token.split(" ")[1];
-        const decodeUser = verifyToken(token, process.env.ACCESS_TOKEN_KEY);
-        const user = await User.findByPk(decodeUser.userId);
+        // token = token.split(" ")[1];
+        // const decodeUser = verifyToken(token, process.env.ACCESS_TOKEN_KEY);
+        // const user = await User.findByPk(decodeUser.userId);
 
-        if (user.userId !== existingComment.userId)
-            return res.status(404).json({ error: { message: 'User not found' } });
+        // const user = req.user;
 
-        const comment = await Comment.update({ description: data.description }, { where: { commentId: id } });
+        // if (user.userId !== existingComment.userId)
+        // return res.status(404).json({ error: { message: 'User not found' } });
+
+        await Comment.update({ description: data.description }, { where: { commentId: id } });
 
         return res.status(200).json({ message: 'comment Updated!' })
     } catch (error) {
@@ -64,8 +67,8 @@ module.exports.deleteComment = async (req, res) => {
     const { id } = req.params;
 
     try {
-        if (id === undefined || id === null)
-            return res.status(404).json({ error: { message: 'Invalid Id' } })
+        // if (id === undefined || id === null)
+            // return res.status(404).json({ error: { message: 'Invalid Id' } })
 
         const rowsAffected = await Comment.destroy({ where: { commentId: id } });
         if (rowsAffected === 0)

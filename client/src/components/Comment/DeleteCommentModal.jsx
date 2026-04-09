@@ -12,8 +12,11 @@ export default function DeleteCommentModal({
   handleClose,
   commentDescription,
 }) {
+
+  //delect comment mutation 
   const [deleteComment, { isLoading }] = useDeleteCommentMutation(commentId);
 
+  //show feedback
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
 
   const onSubmit = async () => {
@@ -24,7 +27,6 @@ export default function DeleteCommentModal({
         showSuccessFeedback("Comment Deleted!");
       }
     } catch (error) {
-      console.log(error);
       showErrorFeedback(error.message);
     }
     handleClose();

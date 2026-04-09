@@ -10,7 +10,6 @@ import CreateBlogModal from "../Blog/CreateBlogModal";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { trimSentence } from "../../utils/TextUtility";
@@ -19,6 +18,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 export default function NavBar({ handleOnSearch }) {
   const { user } = useSelector((state) => state?.auth);
 
+  //show create blog modal
   const [show, setShow] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
 
@@ -27,15 +27,17 @@ export default function NavBar({ handleOnSearch }) {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  //logout user mutation
   const [logoutUser] = useLogoutUserMutation();
-  const { showSuccessFeedback } = useContext(ToastContext);
+  const { showInfoFeedback } = useContext(ToastContext);
 
   const handleLogout = async () => {
     const response = await logoutUser().unwrap();
     if (response) {
       dispatch(logout());
       navigate("/");
-      showSuccessFeedback(`You're logged out successfully`);
+      showInfoFeedback(`You're logged out!`);
     }
   };
 

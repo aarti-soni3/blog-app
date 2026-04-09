@@ -81,6 +81,7 @@ const User = sequelize.define(
     }
 })
 
+//delete address info if user delete
 User.hasMany(Address, {
     onDelete: 'cascade',
     hooks: true,
@@ -93,7 +94,7 @@ Address.belongsTo(User, {
     type: DataTypes.UUID
 });
 
-
+//hash the password before store
 User.beforeCreate(async (user, options) => {
     user.password = await hashedPassword(user.password)
 });

@@ -12,6 +12,7 @@ export default function CreateComment({ blogId }) {
   const { showSuccessFeedback, showErrorFeedback } = useContext(ToastContext);
   const [createComment, { isLoading }] = useCreateCommentMutation();
 
+  //react form hook for handling state data
   const {
     register,
     reset,
@@ -42,7 +43,6 @@ export default function CreateComment({ blogId }) {
       }
     } catch (error) {
       showErrorFeedback(error?.message);
-      console.log(error);
     }
   };
 

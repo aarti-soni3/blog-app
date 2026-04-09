@@ -5,9 +5,11 @@ import Form from "react-bootstrap/Form";
 import BlogCardPlaceHolder from "./BlogCardPlaceHolder";
 
 export default function Blogs({ blogs, isLoading, error }) {
+  //total blogs available in 1 page
   const [blogsPerPage, setBlogsPerPage] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
 
+  //pagination logic
   const startIndex = (currentPage - 1) * blogsPerPage;
   const endIndex = startIndex + blogsPerPage;
   const currentBlogs = blogs?.slice(startIndex, endIndex);
@@ -16,6 +18,7 @@ export default function Blogs({ blogs, isLoading, error }) {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  {/* show blog placeholder grid if data is loading */}
   if (isLoading)
     return (
       <>
@@ -32,6 +35,8 @@ export default function Blogs({ blogs, isLoading, error }) {
   if (error) return <h4 className="text-center">Something went wrong!</h4>;
 
   return (
+
+    // paginated blogs
     <div className="d-flex flex-column">
       <div className="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-4 g-4 ">
         {currentBlogs && currentBlogs.length > 0 ? (
@@ -43,6 +48,7 @@ export default function Blogs({ blogs, isLoading, error }) {
         )}
       </div>
 
+      {/* pagination style */}
       <section className="ms-auto d-flex gap-3 align-items-end">
         <div className="d-flex flex-row">
           <Form.Select

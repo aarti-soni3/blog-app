@@ -5,7 +5,7 @@ module.exports.getUser = async (req, res) => {
 
     const { id } = req.params;
     try {
-
+        //get user data exclude some fields
         const user = await User.findByPk(id, { attributes: { exclude: ['createdAt', 'updatedAt'] } });
         const address = await Address.findOne({ where: { userId: user.userId }, attributes: { exclude: ['addressId', 'userId', 'createdAt', 'updatedAt', 'user_id'] } });
 

@@ -12,13 +12,11 @@ import DeleteUserModal from "./DeleteUserModal";
 export default function Profile() {
   const { user } = useSelector((state) => state.auth);
 
+  //get user data query for getting user n address info
   const { data, isLoading } = useGetUserQuery(user?.userId, {
     skip: !user?.userId,
   });
 
-  {
-    console.log(user, data?.user, isLoading);
-  }
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 

@@ -1,5 +1,7 @@
 const Category = require("../models/CategorySchema");
 
+//schema specifications for express validator
+
 module.exports.createBlogSchema = {
     title: {
         isLength: {
