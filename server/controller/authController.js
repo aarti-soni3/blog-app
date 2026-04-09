@@ -39,8 +39,8 @@ module.exports.register = async (req, res) => {
 
         //create token object,accesstoken & refresh token
         const userTokenObject = { userId: newUser.userId, email: newUser.email }
-        const newAccessToken = createToken(userTokenObject, process.env.ACCESS_TOKEN_KEY, '5m');
-        const newRefreshToken = createToken(userTokenObject, process.env.REFRESH_TOKEN_KEY, '1h');
+        const newAccessToken = createToken(userTokenObject, process.env.ACCESS_TOKEN_KEY, '1h');
+        const newRefreshToken = createToken(userTokenObject, process.env.REFRESH_TOKEN_KEY, '30d');
 
         return res.status(201).json({ message: 'User Registered Successfully!', user: newUser, accessToken: newAccessToken, refreshToken: newRefreshToken })
 
@@ -69,8 +69,8 @@ module.exports.login = async (req, res) => {
         //if valid password generate token
         if (isMatched) {
             const userData = { userId: loggedinUser.userId, email: loggedinUser.email }
-            const newAccessToken = createToken(userData, process.env.ACCESS_TOKEN_KEY, '5m');
-            const newRefreshToken = createToken(userData, process.env.REFRESH_TOKEN_KEY, '1h');
+            const newAccessToken = createToken(userData, process.env.ACCESS_TOKEN_KEY, '1h');
+            const newRefreshToken = createToken(userData, process.env.REFRESH_TOKEN_KEY, '30d');
 
             return res.status(200).json({ message: 'Logged in Successfully!', user: loggedinUser, accessToken: newAccessToken, refreshToken: newRefreshToken })
         }
@@ -126,8 +126,8 @@ module.exports.refresh = async (req, res) => {
 
         //create data and send to client
         const userData = { userId: user.userId, email: user.email }
-        const newAccessToken = createToken(userData, process.env.ACCESS_TOKEN_KEY, '5m');
-        const newRefreshToken = createToken(userData, process.env.REFRESH_TOKEN_KEY, '1h');
+        const newAccessToken = createToken(userData, process.env.ACCESS_TOKEN_KEY, '1h');
+        const newRefreshToken = createToken(userData, process.env.REFRESH_TOKEN_KEY, '30d');
 
         return res.status(200).json({ message: 'Refresh Successfull', accessToken: newAccessToken, refreshToken: newRefreshToken, user: user })
     } catch (error) {
