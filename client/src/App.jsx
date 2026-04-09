@@ -15,22 +15,31 @@ import PageNotFound from "./components/common/PageNotFound";
 import Login from "./components/User/Login";
 import Register from "./components/User/Register";
 import Home from "./components/common/Home";
+import { useState } from "react";
 
 export default function App() {
+  const [searchText, setSearchText] = useState("");
+
   const token = useSelector((state) => state.auth.accessToken);
   useAccessUserQuery(undefined, { skip: !token });
+
+  const handleOnSearch = (e) => {
+    setTimeout(() => {
+      setSearchText(e.target.value);
+    }, 2000);
+  };
 
   return (
     <section className="d-flex flex-column min-vh-100">
       <ToastContainer limit={2} autoClose={3000} />
       <ToastProvider>
         <BrowserRouter>
-          <NavBar />
+          <NavBar handleOnSearch={handleOnSearch} />
 
           <main className="d-flex justify-content-center mt-5 flex-grow-1">
             <Routes>
               <Route path="/" element={<Navigate to={"/blogs"} replace />} />
-              <Route path="/blogs" element={<Home />} />
+              <Route path="/blogs" element={<Home searchText={searchText} />} />
               <Route path="/blogs/:id" element={<BlogDetails />} />
               <Route element={<GuestRoute />}>
                 <Route path="/login" element={<Login />} />

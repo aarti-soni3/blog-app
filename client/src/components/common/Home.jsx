@@ -5,12 +5,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetAllBlogsQuery } from "../../store/services/blogApiSlice";
 import { useSelector } from "react-redux";
 import useFilteredBlogs from "../Blog/useFilteredBlogs";
+import { useMemo } from "react";
+import { findWordFromSentence } from "../../utils/TextUtility";
 
-export default function Home() {
+export default function Home({ searchText }) {
   const { user } = useSelector((state) => state.auth);
   const { data, isLoading, error } = useGetAllBlogsQuery();
 
   const { filteredBlogs, filter, setFilter } = useFilteredBlogs({ data, user });
+
+  const foundBlogs = useMemo(() => {
+    if (!searchText) return filteredBlogs;
+
+    const blogs = filteredBlogs.filter((blog) => {
+      return findWordFromSentence(searchText, blog.title);
+    });
+
+    return blogs;
+  }, [searchText, filteredBlogs]);
 
   return (
     <>
@@ -39,7 +51,7 @@ export default function Home() {
         {/* set filter as key for refresh when changes*/}
         <Blogs
           key={filter}
-          blogs={filteredBlogs}
+          blogs={foundBlogs}
           isLoading={isLoading}
           error={error}
         />

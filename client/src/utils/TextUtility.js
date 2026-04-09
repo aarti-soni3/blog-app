@@ -6,3 +6,7 @@ export const trimSentence = (text, count = 30, isDotAllowed = true) => {
     else
         return text.slice(0, count).trim();
 }
+
+export const findWordFromSentence = (searchText, sentence) => {
+    return sentence.toLowerCase().includes(searchText);
+}

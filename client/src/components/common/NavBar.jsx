@@ -16,7 +16,7 @@ import Col from "react-bootstrap/Col";
 import { trimSentence } from "../../utils/TextUtility";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
-export default function NavBar() {
+export default function NavBar({ handleOnSearch }) {
   const { user } = useSelector((state) => state?.auth);
 
   const [show, setShow] = useState(false);
@@ -80,17 +80,22 @@ export default function NavBar() {
                     type="text"
                     placeholder="Search"
                     className=" mr-sm-2"
+                    onChange={handleOnSearch}
                   />
                 </Col>
-                <Col xs="auto" className="p-0">
+                {/* <Col xs="auto" className="p-0">
                   <Button type="submit" variant="outline-success">
                     Submit
                   </Button>
-                </Col>
+                </Col> */}
               </Row>
             </Form>
           </Nav>
-          <Nav className={isExpanded ? "ms-auto d-flex align-items-center" : "ms-2"}>
+          <Nav
+            className={
+              isExpanded ? "ms-auto d-flex align-items-center" : "ms-2"
+            }
+          >
             <NavLink
               to="/"
               className={({ isActive }) =>
@@ -119,11 +124,10 @@ export default function NavBar() {
                 </NavLink>
               </>
             ) : (
-              <div className={isExpanded ? "d-flex gap-2 align-items-center" : ""}>
-                <NavLink
-                  onClick={handleShow}
-                  className="nav-link"
-                >
+              <div
+                className={isExpanded ? "d-flex gap-2 align-items-center" : ""}
+              >
+                <NavLink onClick={handleShow} className="nav-link">
                   <FontAwesomeIcon icon={faPenToSquare} /> Write
                 </NavLink>
 
