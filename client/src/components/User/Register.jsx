@@ -68,7 +68,7 @@ export default function Register() {
 
   return (
     <>
-      <div className="container d-flex col-md-6 flex-column">
+      <div className="container d-flex col-sm-12 col-lg-8 flex-column">
         <h2 className="text-center">Register page</h2>
         <div className="card shadow p-3 mb-5 mt-3 rounded">
           <form

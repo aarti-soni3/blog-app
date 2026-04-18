@@ -58,7 +58,7 @@ export default function Login() {
 
   return (
     <>
-      <div className="container d-flex col-md-4 flex-column p-5 m-2">
+      <div className="container d-flex col-sm-12 col-lg-6 flex-column p-5 m-2">
         <h2 className="text-center">Login page</h2>
         <div className="card shadow p-3 mb-5 mt-3 rounded">
           <form
