@@ -11,7 +11,6 @@ import { ToastContext } from "../../Context Provider/createContext";
 import Image from "react-bootstrap/Image";
 
 export default function UpdateBlogModal({ blog, handleClose, show }) {
-  
   // get all category to display list
   const { data, isLoading, error } = useGetAllCategoryQuery();
 
@@ -31,6 +30,14 @@ export default function UpdateBlogModal({ blog, handleClose, show }) {
     else return null;
   };
 
+  const defaultValues = {
+    title: blog.title,
+    description: blog.description,
+    image: null,
+    isDeleteImage: false,
+    category: getSelectedCategory()?.name,
+  };
+
   // react form hook for handling data
   const {
     register,
@@ -38,13 +45,8 @@ export default function UpdateBlogModal({ blog, handleClose, show }) {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      title: blog.title,
-      description: blog.description,
-      image: null,
-      isDeleteImage: false,
-      category: getSelectedCategory()?.name,
-    },
+    values: blog,
+    defaultValues,
     mode: "onSubmit",
   });
 
